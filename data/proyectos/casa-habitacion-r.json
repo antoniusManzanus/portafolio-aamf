@@ -1,0 +1,24 @@
+{
+  "nombre": "CASA HABITACIÓN R",
+  "ubicacion": "LOMAS DEL SOL · VERACRUZ",
+  "año": 2011,
+  "tipo": "residencial",
+  "programa": "Residencial · Vivienda Unifamiliar",
+  "area": "280 m²",
+  "estado": "Construido",
+  "portada": "https://i.ibb.co/Mk1zMV43/1.jpg",
+  "galeria": [
+    "https://i.ibb.co/Mk1zMV43/1.jpg",
+    "https://i.ibb.co/0y83YJSR/3.jpg",
+    "https://i.ibb.co/Vh6PvMJ/4.jpg",
+    "https://i.ibb.co/0yHt7mMt/5.jpg",
+    "https://i.ibb.co/fd31tvnf/6.jpg",
+    "https://i.ibb.co/cSSwy3cg/7.jpg",
+    "https://i.ibb.co/sv6bVcqV/8.jpg",
+    "https://i.ibb.co/gZGkKwcX/9.jpg",
+    "https://i.ibb.co/C5F4bhMh/10.jpg",
+    "https://i.ibb.co/Y4cy0QwZ/11.jpg"
+  ],
+  "descripcion_1": "Vivienda unifamiliar de dos niveles desarrollada en el fraccionamiento Lomas del Sol, Veracruz. La composición volumétrica se articula mediante la yuxtaposición de prismas de concreto aparente y acabado liso en color blanco, resolviendo el programa habitacional en una superficie aproximada de 280 m². La fachada principal exhibe la contundencia estructural del proyecto: un gran volumen superior en voladizo domina la composición, revestido parcialmente en madera de cedro, mientras que la planta baja se ancla visualmente mediante un muro de mampostería en piedra laja.",
+  "descripcion_2": "El proceso constructivo evidencia la complejidad técnica implícita en el sistema estructural de marcos de concreto armado. El voladizo del segundo nivel —elemento protagónico del proyecto— fue resuelto mediante trabes pretensadas de concreto que garantizan la estabilidad sin apoyos intermedios. Los renders de proyecto ilustran la intención formal original, con el manejo cromático de los volúmenes y la integración del área exterior ajardinada."
+}

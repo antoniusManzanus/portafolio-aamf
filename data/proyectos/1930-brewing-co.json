@@ -1,0 +1,24 @@
+{
+  "nombre": "1930 BREWING CO.",
+  "ubicacion": "VERACRUZ · MÉXICO",
+  "año": 2022,
+  "tipo": "gastronomia",
+  "programa": "Gastronomía · Cervecería Restaurante",
+  "area": "850 m²",
+  "estado": "Construido",
+  "portada": "https://i.ibb.co/V0mBbVCj/1.jpg",
+  "galeria": [
+    "https://i.ibb.co/V0mBbVCj/1.jpg",
+    "https://i.ibb.co/V030PgsD/3.jpg",
+    "https://i.ibb.co/wrZXY9kC/4.jpg",
+    "https://i.ibb.co/67dQQTgD/5.jpg",
+    "https://i.ibb.co/dnFJ7gG/6.jpg",
+    "https://i.ibb.co/zhk7rFVQ/7.jpg",
+    "https://i.ibb.co/0zMWTqL/8.jpg",
+    "https://i.ibb.co/B2nDDwrj/9.jpg",
+    "https://i.ibb.co/7JYwv1Pn/10.jpg",
+    "https://i.ibb.co/fYBXK1V2/11.jpg"
+  ],
+  "descripcion_1": "El primer concepto restaurantero en Veracruz creado para la nueva medida sanitaria. Un restaurante bar de calidad y relajante, respaldado por creadores reconocidos en el ramo. El edificio y la decoración son encantadores y elegantes, con rústicos toques bien ligados. Disfruta junto a la barra, ideal para las noches de deportes, o relájate en el jardín de la cerveza lleno de abundante vegetación.",
+  "descripcion_2": "El recinto te da la bienvenida con un acogedor pasaje apergolado con bambú, repleto de exuberante vegetación para un sentimiento de abrazo con la naturaleza. En el área exterior encontramos el Jardín de la Cerveza para disfrutar al aire libre con un ambiente agradable y desahogado, debido a su excelente ubicación respecto al edificio y orientación para recibir los frescos vientos del noreste."
+}

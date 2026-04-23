@@ -2,6 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AAMF — Proyectos</title>
 
@@ -45,9 +46,9 @@
   --display: 'Bebas Neue', sans-serif;
 }
 
-/* ══════════ MODO OSCURO ══════════ */
+/* ══════════ MODO OSCURO — automático por sistema ══════════ */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not(.light) {
     --bg: #0e0d0b;
     --fg: #f0ede8;
     --accent: #d4592a;
@@ -58,6 +59,38 @@
     --text-body: #c8c4be;
     --sidebar-chars: #3a3733;
   }
+}
+
+/* ══════════ MODO OSCURO — forzado por el usuario ══════════ */
+html.dark {
+  --bg: #0e0d0b;
+  --fg: #f0ede8;
+  --accent: #d4592a;
+  --muted: #6a6660;
+  --border: #2a2825;
+  --card-hover: #181613;
+  --img-placeholder: #1e1c19;
+  --text-body: #c8c4be;
+  --sidebar-chars: #3a3733;
+}
+
+/* ══════════ MODO CLARO — forzado por el usuario ══════════ */
+html.light {
+  --bg: #f0ede8;
+  --fg: #111;
+  --accent: #b8421a;
+  --muted: #888;
+  --border: #d0ccc5;
+  --card-hover: #e8e4de;
+  --img-placeholder: #d8d4ce;
+  --text-body: #333;
+  --sidebar-chars: #bbb;
+}
+
+/* ══════════ TRANSICIÓN SUAVE AL CAMBIAR MODO ══════════ */
+html { transition: background-color 0.3s ease, color 0.3s ease; }
+body, .header, .sidebar, .detail-overlay, .d-sidebar, .d-right, .d-title-block, footer {
+  transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 html { scroll-behavior: smooth; }
 body {
@@ -109,8 +142,18 @@ body {
 }
 .search-bar input:focus { border-color: var(--fg); }
 .search-bar input::placeholder { color: var(--muted); }
-.header-right { font-family: var(--mono); font-size: 20px; font-weight: 300; letter-spacing: -0.03em; color: var(--muted); cursor: pointer; transition: color 0.2s; }
-.header-right:hover { color: var(--fg); }
+.header-right { display: flex; align-items: center; gap: 16px; }
+.header-index { font-family: var(--mono); font-size: 20px; font-weight: 300; letter-spacing: -0.03em; color: var(--muted); cursor: pointer; transition: color 0.2s; }
+.header-index:hover { color: var(--fg); }
+.theme-toggle {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--muted);
+  cursor: pointer; user-select: none; white-space: nowrap;
+  background: var(--card-hover); border: 1px solid var(--border);
+  padding: 4px 10px; border-radius: 2px;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.theme-toggle:hover { background: var(--fg); color: var(--bg); border-color: var(--fg); }
 
 /* MAIN LAYOUT */
 .main { display: grid; grid-template-columns: 140px 1fr 80px; min-height: calc(100vh - 230px); }
@@ -421,10 +464,10 @@ footer { padding: 20px 32px; border-top: 1px solid var(--border); display: flex;
 <body>
 
 <!-- HEADER STRIP -->
-<div class="header-strip">
-  <div class="hs-cell"><div class="hs-cell-inner" style="background-image:url('https://i.ibb.co/Z6CtC3Kq/1.jpg')"></div></div>
-  <div class="hs-cell"><div class="hs-cell-inner" style="background-image:url('https://i.ibb.co/V0mBbVCj/1.jpg')"></div></div>
-  <div class="hs-cell"><div class="hs-cell-inner" style="background-image:url('https://i.ibb.co/Mk1zMV43/1.jpg')"></div></div>
+<div class="header-strip" id="headerStrip">
+  <div class="hs-cell"><div class="hs-cell-inner" id="hs1"></div></div>
+  <div class="hs-cell"><div class="hs-cell-inner" id="hs2"></div></div>
+  <div class="hs-cell"><div class="hs-cell-inner" id="hs3"></div></div>
 </div>
 
 <header class="header">
@@ -434,7 +477,10 @@ footer { padding: 20px 32px; border-top: 1px solid var(--border); display: flex;
     <span class="logo-text" style="display:none;">AA<span>M</span>F</span>
   </div>
   <div class="search-bar"><input type="text" placeholder="Buscar..." id="searchInput" oninput="filterProjects(this.value)"></div>
-  <div class="header-right">índice</div>
+  <div class="header-right">
+    <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" aria-label="Cambiar modo">● oscuro</button>
+    <span class="header-index">índice</span>
+  </div>
 </header>
 
 <div class="main">
@@ -442,19 +488,15 @@ footer { padding: 20px 32px; border-top: 1px solid var(--border); display: flex;
     <nav><div class="nav-link active">Proyectos</div></nav>
     <div class="sidebar-section">
       <div class="sidebar-label">Año</div>
-      <div class="nav-link" data-year="2024" onclick="filterYear('2024')">2024</div>
-      <div class="nav-link" data-year="2022" onclick="filterYear('2022')">2022</div>
-      <div class="nav-link" data-year="2012" onclick="filterYear('2012')">2012</div>
-      <div class="nav-link" data-year="2011" onclick="filterYear('2011')">2011</div>
-      <div class="nav-link" data-year="2009" onclick="filterYear('2009')">2009</div>
-      <div class="nav-link" onclick="filterYear('')">Todos</div>
+      <div id="yearFilters"></div>
+      <div class="nav-link" onclick="filterYear(\'\')">Todos</div>
     </div>
     <div class="sidebar-section">
       <div class="sidebar-label">Tipo</div>
-      <div class="nav-link" data-type="residencial" onclick="filterType('residencial')">Residencial</div>
-      <div class="nav-link" data-type="comercial" onclick="filterType('comercial')">Comercial</div>
-      <div class="nav-link" data-type="gastronomia" onclick="filterType('gastronomia')">Gastronomía</div>
-      <div class="nav-link" onclick="filterType('')">Todos</div>
+      <div class="nav-link" data-type="residencial" onclick="filterType(\'residencial\')">Residencial</div>
+      <div class="nav-link" data-type="comercial" onclick="filterType(\'comercial\')">Comercial</div>
+      <div class="nav-link" data-type="gastronomia" onclick="filterType(\'gastronomia\')">Gastronomía</div>
+      <div class="nav-link" onclick="filterType(\'\')">Todos</div>
       <div class="nav-link" style="color:var(--accent);margin-top:12px;" onclick="clearFilters()">Limpiar</div>
     </div>
   </aside>
@@ -462,107 +504,25 @@ footer { padding: 20px 32px; border-top: 1px solid var(--border); display: flex;
   <main class="projects">
     <div class="filter-bar">
       <button class="mobile-filter-toggle" id="filterToggle" onclick="toggleSidebar()">Filtros</button>
-      <button class="filter-btn active" onclick="setView('grid',this)">Red</button>
-      <button class="filter-btn" onclick="setView('list',this)">Lista</button>
+      <button class="filter-btn active" onclick="setView(\'grid\',this)">Red</button>
+      <button class="filter-btn" onclick="setView(\'list\',this)">Lista</button>
     </div>
     <div class="project-counter" id="projectCounter"></div>
     <div class="projects-grid" id="projectsGrid">
-
-      <!-- 1. CORPORATIVO SANTANDER -->
-      <div class="project-card" data-year="2024" data-type="comercial"
-        data-t="CORPORATIVO SANTANDER" data-l="VERACRUZ · MÉXICO" data-yd="2024"
-        data-td="Comercial · Corporativo / Banco" data-a="9.200 m²" data-s="Construido"
-        data-i1="https://i.ibb.co/Z6CtC3Kq/1.jpg"
-        data-i2="https://i.ibb.co/JFHhgZT8/2.jpg"
-        data-i3="https://i.ibb.co/p6nx75hD/3.jpg"
-        data-i4="https://i.ibb.co/1fXnY1c5/4.jpg"
-        data-i5="https://i.ibb.co/b5YKD9mX/5.jpg"
-        data-p1="Edificio de 5 niveles conformado por 2 sótanos de estacionamiento (127 y 123 cajones respectivamente), planta baja, y cinco niveles superiores destinados al uso bancario y corporativo de Banco Santander, así como local comercial Fantasías Miguel. Niveles: Sótano 2: -6.60 M · Sótano 1: -3.30 M · Planta baja: +0.00 M · Primer nivel: +4.40 M · Segundo nivel: +8.80 M · Tercer nivel: +13.20 M · Cuarto nivel: +17.60 M · Quinto nivel: +22.00 M · Terraza: +26.40 M."
-        data-p2="Las fachadas están generadas por medio de módulos fabricados con estructura de acero y recubrimiento de DenGlass, con módulos en esquina y remate de módulo con bota aguas. Fachada integral de cristal LowE. Los accesos a estacionamiento se realizan a través de 2 rampas distintas con un 15% de pendiente sobre Av. Américas. Planta baja: 1,195.66 m² repartida en 33 cajones, 3 de ellos para discapacitados."
-        onclick="openDetail(this)">
-        <div class="project-img-wrap"><img class="project-img" src="https://i.ibb.co/Z6CtC3Kq/1.jpg" loading="lazy"></div>
-        <div class="project-name">CORPORATIVO SANTANDER<span class="project-year">, 2024</span></div>
+      <!-- Tarjetas generadas dinámicamente desde /data/proyectos/ -->
+      <div style="padding:40px;font-family:var(--mono);font-size:11px;color:var(--muted);grid-column:1/-1;">
+        Cargando proyectos...
       </div>
-
-      <!-- 2. 1930 BREWING CO. -->
-      <div class="project-card" data-year="2022" data-type="gastronomia"
-        data-t="1930 BREWING CO." data-l="VERACRUZ · MÉXICO" data-yd="2022"
-        data-td="Gastronomía · Cervecería Restaurante" data-a="850 m²" data-s="Construido"
-        data-i1="https://i.ibb.co/V0mBbVCj/1.jpg"
-        data-gallery='["https://i.ibb.co/V0mBbVCj/1.jpg", "https://i.ibb.co/V030PgsD/3.jpg", "https://i.ibb.co/wrZXY9kC/4.jpg", "https://i.ibb.co/67dQQTgD/5.jpg", "https://i.ibb.co/dnFJ7gG/6.jpg", "https://i.ibb.co/zhk7rFVQ/7.jpg", "https://i.ibb.co/0zMWTqL/8.jpg", "https://i.ibb.co/B2nDDwrj/9.jpg", "https://i.ibb.co/7JYwv1Pn/10.jpg", "https://i.ibb.co/fYBXK1V2/11.jpg"]'
-        data-p1="El primer concepto restaurantero en Veracruz creado para la nueva medida sanitaria. Un restaurante bar de calidad y relajante, respaldado por creadores reconocidos en el ramo. El edificio y la decoración son encantadores y elegantes, con rústicos toques bien ligados. Disfruta junto a la barra, ideal para las noches de deportes, o relájate en el jardín de la cerveza lleno de abundante vegetación."
-        data-p2="El recinto te da la bienvenida con un acogedor pasaje apergolado con bambú, repleto de exuberante vegetación para un sentimiento de abrazo con la naturaleza. En el área exterior encontramos el Jardín de la Cerveza para disfrutar al aire libre con un ambiente agradable y desahogado, debido a su excelente ubicación respecto al edificio y orientación para recibir los frescos vientos del noreste."
-        onclick="openDetail(this)">
-        <div class="project-img-wrap"><img class="project-img" src="https://i.ibb.co/V0mBbVCj/1.jpg" loading="lazy"></div>
-        <div class="project-name">1930 BREWING CO.<span class="project-year">, 2022</span></div>
-      </div>
-
-      <!-- 3. CASA HABITACIÓN R -->
-      <div class="project-card" data-year="2011" data-type="residencial"
-        data-t="CASA HABITACIÓN R" data-l="LOMAS DEL SOL · VERACRUZ" data-yd="2011"
-        data-td="Residencial · Vivienda Unifamiliar" data-a="280 m²" data-s="Construido"
-        data-i1="https://i.ibb.co/Mk1zMV43/1.jpg"
-        data-gallery='["https://i.ibb.co/Mk1zMV43/1.jpg", "https://i.ibb.co/0y83YJSR/3.jpg", "https://i.ibb.co/Vh6PvMJ/4.jpg", "https://i.ibb.co/0yHt7mMt/5.jpg", "https://i.ibb.co/fd31tvnf/6.jpg", "https://i.ibb.co/cSSwy3cg/7.jpg", "https://i.ibb.co/sv6bVcqV/8.jpg", "https://i.ibb.co/gZGkKwcX/9.jpg", "https://i.ibb.co/C5F4bhMh/10.jpg", "https://i.ibb.co/Y4cy0QwZ/11.jpg"]'
-        data-p1="Vivienda unifamiliar de dos niveles desarrollada en el fraccionamiento Lomas del Sol, Veracruz. La composición volumétrica se articula mediante la yuxtaposición de prismas de concreto aparente y acabado liso en color blanco, resolviendo el programa habitacional en una superficie aproximada de 280 m². La fachada principal exhibe la contundencia estructural del proyecto: un gran volumen superior en voladizo domina la composición, revestido parcialmente en madera de cedro, mientras que la planta baja se ancla visualmente mediante un muro de mampostería en piedra laja."
-        data-p2="El proceso constructivo evidencia la complejidad técnica implícita en el sistema estructural de marcos de concreto armado. El voladizo del segundo nivel —elemento protagónico del proyecto— fue resuelto mediante trabes pretensadas de concreto que garantizan la estabilidad sin apoyos intermedios. Los renders de proyecto ilustran la intención formal original, con el manejo cromático de los volúmenes y la integración del área exterior ajardinada."
-        onclick="openDetail(this)">
-        <div class="project-img-wrap"><img class="project-img" src="https://i.ibb.co/Mk1zMV43/1.jpg" loading="lazy"></div>
-        <div class="project-name">CASA HABITACIÓN R<span class="project-year">, 2011</span></div>
-      </div>
-
-      <!-- 4. CASA HABITACIÓN CONCHAL -->
-      <div class="project-card" data-year="2012" data-type="residencial"
-        data-t="CASA HABITACIÓN CONCHAL" data-l="EL CONCHAL · VERACRUZ" data-yd="2012"
-        data-td="Residencial · Vivienda Unifamiliar" data-a="240 m²" data-s="Construido"
-        data-i1="https://i.ibb.co/YVGYyb6/1.jpg"
-        data-gallery='["https://i.ibb.co/YVGYyb6/1.jpg", "https://i.ibb.co/cK692p3p/3.jpg", "https://i.ibb.co/fYjYXc5C/4.jpg", "https://i.ibb.co/4RwbpyCV/5.jpg", "https://i.ibb.co/3mn8xdcY/6.jpg", "https://i.ibb.co/hRmcv248/7.jpg", "https://i.ibb.co/C3sbjy3J/8.jpg", "https://i.ibb.co/C37YrNQJ/9.jpg", "https://i.ibb.co/HL90Q2Mh/10.jpg", "https://i.ibb.co/BHsGJ2Bz/11.jpg"]'
-        data-p1="Vivienda unifamiliar de dos niveles emplazada en la localidad de El Conchal, Veracruz. La propuesta arquitectónica explora la tensión entre masa y vacío mediante la superposición de volúmenes prismáticos de concreto aparente, donde el segundo nivel avanza en voladizo sobre la planta baja generando un espacio de sombra que articula la transición entre el exterior y el acceso principal."
-        data-p2="El proceso constructivo se desarrolló enteramente en concreto armado con muros de tabique recocido aplanados. La escalera interior, resuelta en madera de cedro rojo con zancas de acero estructural, constituye el elemento escultórico central. El lenguaje formal sobrio y la paleta de materiales sin revestimientos superfluos reflejan una arquitectura de carácter brutalista adaptada al clima cálido-húmedo del Golfo de México."
-        onclick="openDetail(this)">
-        <div class="project-img-wrap"><img class="project-img" src="https://i.ibb.co/YVGYyb6/1.jpg" loading="lazy"></div>
-        <div class="project-name">CASA HABITACIÓN CONCHAL<span class="project-year">, 2012</span></div>
-      </div>
-
-      <!-- 5. CASA HABITACIÓN MV -->
-      <div class="project-card" data-year="2009" data-type="residencial"
-        data-t="CASA HABITACIÓN MV" data-l="LOMAS DIAMANTE · VERACRUZ" data-yd="2009"
-        data-td="Residencial · Vivienda Unifamiliar" data-a="320 m²" data-s="Proyecto"
-        data-i1="https://i.ibb.co/3mvH6Z7p/1.jpg"
-        data-gallery='["https://i.ibb.co/3mvH6Z7p/1.jpg", "https://i.ibb.co/KxtyVT8k/3.jpg", "https://i.ibb.co/4nnM8LKT/4.jpg", "https://i.ibb.co/0jNZMP1P/5.jpg", "https://i.ibb.co/HDGGD1DM/6.jpg"]'
-        data-p1="Vivienda unifamiliar de tres niveles ubicada en el fraccionamiento Lomas Diamante, Veracruz. La fachada principal se articula mediante la superposición de volúmenes horizontales en acabado liso blanco, separados por una banda continua de recubrimiento en piedra gris texturizada que actúa como elemento de transición entre niveles. El área de cochera techada se integra al conjunto bajo una losa en voladizo."
-        data-p2="La fachada posterior dialoga con el jardín privado mediante un muro cortina de piso a techo en aluminio y cristal. El volumen secundario —revestido en panel oscuro contrastante y celosía roja— genera una identidad compositiva al conjunto al tiempo que protege las áreas de servicio del soleamiento directo."
-        onclick="openDetail(this)">
-        <div class="project-img-wrap"><img class="project-img" src="https://i.ibb.co/3mvH6Z7p/1.jpg" loading="lazy"></div>
-        <div class="project-name">CASA HABITACIÓN MV<span class="project-year">, 2009</span></div>
-      </div>
-
-      <!-- 6. RESTAURANTE BAR — HOTEL IMPERIAL -->
-      <div class="project-card" data-year="2009" data-type="gastronomia"
-        data-t="RESTAURANTE BAR — HOTEL IMPERIAL" data-l="CENTRO HISTÓRICO · VERACRUZ" data-yd="2009"
-        data-td="Gastronomía · Diseño Interior / Hotel" data-a="1.200 m²" data-s="Proyecto"
-        data-i1="https://i.ibb.co/rfvRNmKR/1.jpg"
-        data-gallery='["https://i.ibb.co/rfvRNmKR/1.jpg", "https://i.ibb.co/d4qKrzkD/3.jpg", "https://i.ibb.co/hFdKCMj1/4.jpg", "https://i.ibb.co/scqTXg2/5.jpg", "https://i.ibb.co/4Rcn9F1f/6.jpg", "https://i.ibb.co/4wc5Ww23/7.jpg", "https://i.ibb.co/HpRzwYz3/8.jpg"]'
-        data-p1="Proyecto de diseño interior para el restaurante bar del Hotel Imperial, ubicado en el Centro Histórico de Veracruz. El programa integra área de comedor, barra, lobby y habitaciones bajo un concepto náutico que dialoga con la tradición portuaria de la ciudad. Los materiales seleccionados —madera, latón y textiles naturales— evocan la elegancia del período histórico del inmueble."
-        data-p2="La intervención respeta la volumetría y los elementos patrimoniales del edificio mientras introduce un lenguaje contemporáneo en los acabados y el mobiliario. La iluminación cálida y controlada refuerza la atmósfera íntima del restaurante, concebido para una experiencia gastronómica de alta categoría en un entorno de valor histórico."
-        onclick="openDetail(this)">
-        <div class="project-img-wrap"><img class="project-img" src="https://i.ibb.co/rfvRNmKR/1.jpg" loading="lazy"></div>
-        <div class="project-name">RESTAURANTE BAR — HOTEL IMPERIAL<span class="project-year">, 2009</span></div>
-      </div>
-
     </div>
   </main>
 
   <aside class="index-panel">
     <div class="index-label">Índice</div>
     <div class="index-item bold">Año</div>
-    <div class="index-item" onclick="filterYear('2024')">2024</div>
-    <div class="index-item" onclick="filterYear('2022')">2022</div>
-    <div class="index-item" onclick="filterYear('2012')">2012</div>
-    <div class="index-item" onclick="filterYear('2011')">2011</div>
-    <div class="index-item" onclick="filterYear('2009')">2009</div>
+    <div id="yearIndex"></div>
     <div class="index-item bold">Vista</div>
-    <div class="index-item" onclick="setView('grid',this)">Red</div>
-    <div class="index-item" onclick="setView('list',this)">Lista</div>
+    <div class="index-item" onclick="setView(\'grid\',this)">Red</div>
+    <div class="index-item" onclick="setView(\'list\',this)">Lista</div>
   </aside>
 </div>
 
@@ -617,45 +577,129 @@ footer { padding: 20px 32px; border-top: 1px solid var(--border); display: flex;
 </div>
 
 <script>
+// ── Modo oscuro / claro ──────────────────────────────────────────────
+(function() {
+  const saved = localStorage.getItem('theme');
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const isDark = saved === 'dark' || (!saved && prefersDark);
+  document.documentElement.classList.toggle('dark', isDark);
+  document.documentElement.classList.toggle('light', !isDark);
+})();
+
+function toggleTheme() {
+  const html = document.documentElement;
+  const isDark = html.classList.contains('dark');
+  html.classList.toggle('dark', !isDark);
+  html.classList.toggle('light', isDark);
+  localStorage.setItem('theme', isDark ? 'light' : 'dark');
+  updateToggleLabel();
+}
+function updateToggleLabel() {
+  const btn = document.getElementById('themeToggle');
+  if (!btn) return;
+  btn.textContent = document.documentElement.classList.contains('dark') ? '● oscuro' : '○ claro';
+}
+document.addEventListener('DOMContentLoaded', updateToggleLabel);
+
+// ── Slugs de proyectos ───────────────────────────────────────────────
+const SLUGS = [
+  'corporativo-santander',
+  '1930-brewing-co',
+  'casa-habitacion-r',
+  'casa-habitacion-conchal',
+  'casa-habitacion-mv',
+  'restaurante-hotel-imperial'
+];
+
+let proyectos = [];
 let currentYear = '', currentType = '';
 
-function toggleSidebar() {
-  const sidebar = document.querySelector('.sidebar');
-  const btn = document.getElementById('filterToggle');
-  sidebar.classList.toggle('open');
-  btn.classList.toggle('active');
-  btn.textContent = sidebar.classList.contains('open') ? 'Cerrar' : 'Filtros';
+// ── Carga de datos ───────────────────────────────────────────────────
+async function loadProyectos() {
+  const results = await Promise.all(
+    SLUGS.map(slug =>
+      fetch(`data/proyectos/${slug}.json`)
+        .then(r => r.json())
+        .then(data => ({ ...data, slug }))
+        .catch(() => null)
+    )
+  );
+  proyectos = results.filter(Boolean);
+  renderGrid();
+  renderSidebarYears();
+  renderHeaderStrip();
 }
 
+// ── Render cuadrícula ────────────────────────────────────────────────
+function renderGrid() {
+  const grid = document.getElementById('projectsGrid');
+  grid.innerHTML = proyectos.map((p, i) => `
+    <div class="project-card"
+      data-year="${p.año}"
+      data-type="${p.tipo}"
+      data-slug="${p.slug}"
+      style="animation-delay:${(i+1)*0.05}s"
+      onclick="openDetail('${p.slug}')">
+      <div class="project-img-wrap">
+        <img class="project-img" src="${p.portada}" loading="lazy" alt="${p.nombre}">
+      </div>
+      <div class="project-name">${p.nombre}<span class="project-year">, ${p.año}</span></div>
+    </div>
+  `).join('');
+  updateCounter(proyectos.length, proyectos.length);
+}
+
+// ── Header strip con las 3 primeras portadas ─────────────────────────
+function renderHeaderStrip() {
+  ['hs1','hs2','hs3'].forEach((id, i) => {
+    const el = document.getElementById(id);
+    if (el && proyectos[i]) {
+      el.style.backgroundImage = `url('${proyectos[i].portada}')`;
+    }
+  });
+}
+
+// ── Sidebar: años únicos ─────────────────────────────────────────────
+function renderSidebarYears() {
+  const years = [...new Set(proyectos.map(p => p.año))].sort((a,b) => b-a);
+  const yearFilters = document.getElementById('yearFilters');
+  const yearIndex = document.getElementById('yearIndex');
+  if (yearFilters) yearFilters.innerHTML = years.map(y =>
+    `<div class="nav-link" data-year="${y}" onclick="filterYear(${y})">${y}</div>`
+  ).join('');
+  if (yearIndex) yearIndex.innerHTML = years.map(y =>
+    `<div class="index-item" onclick="filterYear(${y})">${y}</div>`
+  ).join('');
+}
+
+// ── Filtros ──────────────────────────────────────────────────────────
 function filterProjects(q) {
   const cards = document.querySelectorAll('.project-card');
   let visible = 0;
   cards.forEach(c => {
     const nm = c.querySelector('.project-name').textContent.toLowerCase();
     const ms = !q || nm.includes(q.toLowerCase());
-    const my = !currentYear || c.dataset.year === currentYear;
+    const my = !currentYear || c.dataset.year === String(currentYear);
     const mt = !currentType || c.dataset.type === currentType;
     const show = ms && my && mt;
     c.style.display = show ? '' : 'none';
     if (show) visible++;
   });
-  const counter = document.getElementById('projectCounter');
-  if (counter) {
-    const total = cards.length;
-    counter.innerHTML = visible < total
-      ? `Mostrando <span>${visible}</span> de <span>${total}</span> proyectos`
-      : '';
-  }
-  // Update active states on sidebar nav-links
+  updateCounter(visible, cards.length);
   document.querySelectorAll('.sidebar .nav-link[data-year]').forEach(el => {
-    el.classList.toggle('filter-active', el.dataset.year === currentYear && currentYear !== '');
+    el.classList.toggle('filter-active', String(el.dataset.year) === String(currentYear) && currentYear !== '');
   });
   document.querySelectorAll('.sidebar .nav-link[data-type]').forEach(el => {
     el.classList.toggle('filter-active', el.dataset.type === currentType && currentType !== '');
   });
 }
+function updateCounter(visible, total) {
+  const el = document.getElementById('projectCounter');
+  if (el) el.innerHTML = visible < total
+    ? `Mostrando <span>${visible}</span> de <span>${total}</span> proyectos` : '';
+}
 function filterYear(y) {
-  currentYear = currentYear === y ? '' : y;
+  currentYear = currentYear == y ? '' : y;
   filterProjects(document.getElementById('searchInput').value);
 }
 function filterType(t) {
@@ -667,6 +711,8 @@ function clearFilters() {
   document.getElementById('searchInput').value = '';
   filterProjects('');
 }
+
+// ── Vista grid / lista ───────────────────────────────────────────────
 function setView(view, btn) {
   document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
   if (btn) btn.classList.add('active');
@@ -682,6 +728,16 @@ function setView(view, btn) {
   }
 }
 
+// ── Sidebar móvil ────────────────────────────────────────────────────
+function toggleSidebar() {
+  const sidebar = document.querySelector('.sidebar');
+  const btn = document.getElementById('filterToggle');
+  sidebar.classList.toggle('open');
+  btn.classList.toggle('active');
+  btn.textContent = sidebar.classList.contains('open') ? 'Cerrar' : 'Filtros';
+}
+
+// ── Galería ──────────────────────────────────────────────────────────
 function buildGallery(el, imgs, p1, p2) {
   const n = imgs.length;
   let html = '';
@@ -723,46 +779,49 @@ function buildGallery(el, imgs, p1, p2) {
   el.innerHTML = html;
 }
 
-function openDetail(card) {
-  const d = card.dataset;
+// ── Overlay detalle ──────────────────────────────────────────────────
+function openDetail(slug) {
+  const p = proyectos.find(x => x.slug === slug);
+  if (!p) return;
   const ov = document.getElementById('detailOverlay');
   ov.scrollTop = 0;
   ov.classList.add('is-open');
   document.body.style.overflow = 'hidden';
 
-  document.getElementById('dHeroImg').src = d.i1;
-  document.getElementById('dTitleBig').textContent = d.t;
-  document.getElementById('dTitleLoc').textContent = d.l;
-  document.getElementById('dYear').textContent = d.yd;
-  document.getElementById('dType').textContent = d.td;
-  document.getElementById('dArea').textContent = d.a;
-  document.getElementById('dStatus').textContent = d.s;
+  document.getElementById('dHeroImg').src = p.portada;
+  document.getElementById('dTitleBig').textContent = p.nombre;
+  document.getElementById('dTitleLoc').textContent = p.ubicacion;
+  document.getElementById('dYear').textContent = p.año;
+  document.getElementById('dType').textContent = p.programa;
+  document.getElementById('dArea').textContent = p.area;
+  document.getElementById('dStatus').textContent = p.estado;
   document.getElementById('dSidebarChars').textContent =
-    d.t.replace(/[^A-Za-z]/g,'').toUpperCase().padEnd(14,'·').slice(0,14);
+    p.nombre.replace(/[^A-Za-z]/g,'').toUpperCase().padEnd(14,'·').slice(0,14);
 
   const galleryEl = document.getElementById('dGallery');
-  let gImgs = [];
-  if (d.gallery) { try { gImgs = JSON.parse(d.gallery); } catch(e) {} }
+  const imgs = p.galeria || [];
 
-  if (gImgs.length > 0) {
+  if (imgs.length > 0) {
     document.getElementById('dContentStd').style.display = 'none';
     document.getElementById('dImg3').parentElement.style.display = 'none';
     document.getElementById('dImg4Wrap').style.display = 'none';
     document.getElementById('dImg5Wrap').style.display = 'none';
     galleryEl.style.display = '';
-    buildGallery(galleryEl, gImgs, d.p1, d.p2);
+    buildGallery(galleryEl, imgs, p.descripcion_1, p.descripcion_2);
   } else {
+    // Modo estándar (Corporativo Santander)
+    const imagenes = p.imagenes || [];
     document.getElementById('dContentStd').style.display = '';
     document.getElementById('dImg3').parentElement.style.display = '';
     galleryEl.style.display = 'none';
-    document.getElementById('dImg2').src = d.i2 || '';
-    document.getElementById('dImg3').src = d.i3 || '';
-    document.getElementById('dImg4Wrap').style.display = d.i4 ? '' : 'none';
-    if (d.i4) document.getElementById('dImg4').src = d.i4;
-    document.getElementById('dImg5Wrap').style.display = d.i5 ? '' : 'none';
-    if (d.i5) document.getElementById('dImg5').src = d.i5;
-    document.getElementById('dP1').textContent = d.p1;
-    document.getElementById('dP2').textContent = d.p2;
+    document.getElementById('dImg2').src = imagenes[1] || '';
+    document.getElementById('dImg3').src = imagenes[2] || '';
+    document.getElementById('dImg4Wrap').style.display = imagenes[3] ? '' : 'none';
+    if (imagenes[3]) document.getElementById('dImg4').src = imagenes[3];
+    document.getElementById('dImg5Wrap').style.display = imagenes[4] ? '' : 'none';
+    if (imagenes[4]) document.getElementById('dImg5').src = imagenes[4];
+    document.getElementById('dP1').textContent = p.descripcion_1;
+    document.getElementById('dP2').textContent = p.descripcion_2;
   }
 }
 
@@ -773,6 +832,9 @@ function closeDetail() {
 }
 
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDetail(); });
+
+// ── Inicializar ──────────────────────────────────────────────────────
+loadProyectos();
 </script>
 </body>
 </html>

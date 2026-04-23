@@ -1,0 +1,24 @@
+{
+  "nombre": "CASA HABITACIÓN CONCHAL",
+  "ubicacion": "EL CONCHAL · VERACRUZ",
+  "año": 2012,
+  "tipo": "residencial",
+  "programa": "Residencial · Vivienda Unifamiliar",
+  "area": "240 m²",
+  "estado": "Construido",
+  "portada": "https://i.ibb.co/YVGYyb6/1.jpg",
+  "galeria": [
+    "https://i.ibb.co/YVGYyb6/1.jpg",
+    "https://i.ibb.co/cK692p3p/3.jpg",
+    "https://i.ibb.co/fYjYXc5C/4.jpg",
+    "https://i.ibb.co/4RwbpyCV/5.jpg",
+    "https://i.ibb.co/3mn8xdcY/6.jpg",
+    "https://i.ibb.co/hRmcv248/7.jpg",
+    "https://i.ibb.co/C3sbjy3J/8.jpg",
+    "https://i.ibb.co/C37YrNQJ/9.jpg",
+    "https://i.ibb.co/HL90Q2Mh/10.jpg",
+    "https://i.ibb.co/BHsGJ2Bz/11.jpg"
+  ],
+  "descripcion_1": "Vivienda unifamiliar de dos niveles emplazada en la localidad de El Conchal, Veracruz. La propuesta arquitectónica explora la tensión entre masa y vacío mediante la superposición de volúmenes prismáticos de concreto aparente, donde el segundo nivel avanza en voladizo sobre la planta baja generando un espacio de sombra que articula la transición entre el exterior y el acceso principal.",
+  "descripcion_2": "El proceso constructivo se desarrolló enteramente en concreto armado con muros de tabique recocido aplanados. La escalera interior, resuelta en madera de cedro rojo con zancas de acero estructural, constituye el elemento escultórico central. El lenguaje formal sobrio y la paleta de materiales sin revestimientos superfluos reflejan una arquitectura de carácter brutalista adaptada al clima cálido-húmedo del Golfo de México."
+}

@@ -1,0 +1,20 @@
+{
+  "nombre": "CORPORATIVO SANTANDER",
+  "ubicacion": "VERACRUZ · MÉXICO",
+  "año": 2024,
+  "tipo": "comercial",
+  "programa": "Comercial · Corporativo / Banco",
+  "area": "9.200 m²",
+  "estado": "Construido",
+  "portada": "https://i.ibb.co/Z6CtC3Kq/1.jpg",
+  "galeria": [],
+  "descripcion_1": "Edificio de 5 niveles conformado por 2 sótanos de estacionamiento (127 y 123 cajones respectivamente), planta baja, y cinco niveles superiores destinados al uso bancario y corporativo de Banco Santander, así como local comercial Fantasías Miguel. Niveles: Sótano 2: -6.60 M · Sótano 1: -3.30 M · Planta baja: +0.00 M · Primer nivel: +4.40 M · Segundo nivel: +8.80 M · Tercer nivel: +13.20 M · Cuarto nivel: +17.60 M · Quinto nivel: +22.00 M · Terraza: +26.40 M.",
+  "descripcion_2": "Las fachadas están generadas por medio de módulos fabricados con estructura de acero y recubrimiento de DenGlass, con módulos en esquina y remate de módulo con bota aguas. Fachada integral de cristal LowE. Los accesos a estacionamiento se realizan a través de 2 rampas distintas con un 15% de pendiente sobre Av. Américas. Planta baja: 1,195.66 m² repartida en 33 cajones, 3 de ellos para discapacitados.",
+  "imagenes": [
+    "https://i.ibb.co/Z6CtC3Kq/1.jpg",
+    "https://i.ibb.co/JFHhgZT8/2.jpg",
+    "https://i.ibb.co/p6nx75hD/3.jpg",
+    "https://i.ibb.co/1fXnY1c5/4.jpg",
+    "https://i.ibb.co/b5YKD9mX/5.jpg"
+  ]
+}

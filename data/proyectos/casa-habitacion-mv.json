@@ -1,0 +1,19 @@
+{
+  "nombre": "CASA HABITACIÓN MV",
+  "ubicacion": "LOMAS DIAMANTE · VERACRUZ",
+  "año": 2009,
+  "tipo": "residencial",
+  "programa": "Residencial · Vivienda Unifamiliar",
+  "area": "320 m²",
+  "estado": "Proyecto",
+  "portada": "https://i.ibb.co/3mvH6Z7p/1.jpg",
+  "galeria": [
+    "https://i.ibb.co/3mvH6Z7p/1.jpg",
+    "https://i.ibb.co/KxtyVT8k/3.jpg",
+    "https://i.ibb.co/4nnM8LKT/4.jpg",
+    "https://i.ibb.co/0jNZMP1P/5.jpg",
+    "https://i.ibb.co/HDGGD1DM/6.jpg"
+  ],
+  "descripcion_1": "Vivienda unifamiliar de tres niveles ubicada en el fraccionamiento Lomas Diamante, Veracruz. La fachada principal se articula mediante la superposición de volúmenes horizontales en acabado liso blanco, separados por una banda continua de recubrimiento en piedra gris texturizada que actúa como elemento de transición entre niveles. El área de cochera techada se integra al conjunto bajo una losa en voladizo.",
+  "descripcion_2": "La fachada posterior dialoga con el jardín privado mediante un muro cortina de piso a techo en aluminio y cristal. El volumen secundario —revestido en panel oscuro contrastante y celosía roja— genera una identidad compositiva al conjunto al tiempo que protege las áreas de servicio del soleamiento directo."
+}
