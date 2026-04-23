@@ -28,6 +28,7 @@
 <meta name="twitter:title" content="AAMF — Estudio de Arquitectura">
 <meta name="twitter:description" content="Portafolio de arquitectura: proyectos residenciales, comerciales y gastronómicos en Veracruz, México.">
 <meta name="twitter:image" content="https://i.ibb.co/vxPfSrHd/LOGO-MANZANO.png">
+<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=DM+Sans:ital,opsz,wght@0,9..40,200;0,9..40,300;0,9..40,400;1,9..40,200&family=Bebas+Neue&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -835,6 +836,18 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDetail(
 
 // ── Inicializar ──────────────────────────────────────────────────────
 loadProyectos();
+</script>
+<script>
+  // Netlify Identity — redirige al panel /admin tras el login
+  if (window.netlifyIdentity) {
+    window.netlifyIdentity.on('init', user => {
+      if (!user) {
+        window.netlifyIdentity.on('login', () => {
+          document.location.href = '/admin/';
+        });
+      }
+    });
+  }
 </script>
 </body>
 </html>

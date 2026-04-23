@@ -1,0 +1,111 @@
+backend:
+  name: git-gateway
+  branch: main
+
+# Carpeta donde se guardan las imágenes subidas desde el CMS
+media_folder: assets/img
+public_folder: /assets/img
+
+# Idioma del panel
+locale: es
+
+collections:
+  - name: proyectos
+    label: Proyectos
+    label_singular: Proyecto
+    folder: data/proyectos
+    create: true
+    delete: true
+    slug: "{{slug}}"
+    identifier_field: nombre
+    summary: "{{nombre}} — {{año}}"
+    sortable_fields: [año, nombre, tipo]
+    view_filters:
+      - label: Residencial
+        field: tipo
+        pattern: residencial
+      - label: Comercial
+        field: tipo
+        pattern: comercial
+      - label: Gastronomía
+        field: tipo
+        pattern: gastronomia
+
+    fields:
+      - label: Nombre del proyecto
+        name: nombre
+        widget: string
+        hint: "En mayúsculas. Ej: CORPORATIVO SANTANDER"
+
+      - label: Ubicación
+        name: ubicacion
+        widget: string
+        hint: "Ej: VERACRUZ · MÉXICO"
+
+      - label: Año
+        name: año
+        widget: number
+        value_type: int
+        min: 1990
+        max: 2099
+
+      - label: Tipo
+        name: tipo
+        widget: select
+        options:
+          - { label: Residencial, value: residencial }
+          - { label: Comercial, value: comercial }
+          - { label: Gastronomía, value: gastronomia }
+
+      - label: Programa
+        name: programa
+        widget: string
+        hint: "Ej: Residencial · Vivienda Unifamiliar"
+
+      - label: Superficie
+        name: area
+        widget: string
+        hint: "Ej: 280 m²"
+
+      - label: Estado
+        name: estado
+        widget: select
+        options:
+          - { label: Construido, value: Construido }
+          - { label: En construcción, value: En construcción }
+          - { label: Proyecto, value: Proyecto }
+
+      - label: Imagen de portada
+        name: portada
+        widget: image
+        hint: "Imagen principal que aparece en la cuadrícula de proyectos"
+
+      - label: Galería de imágenes
+        name: galeria
+        widget: list
+        collapsed: false
+        hint: "Agrega todas las imágenes del proyecto en orden. Deja vacío si usas imágenes individuales."
+        field:
+          label: Imagen
+          name: imagen
+          widget: image
+
+      - label: Imágenes individuales
+        name: imagenes
+        widget: list
+        collapsed: true
+        hint: "Solo para proyectos sin galería (máx. 5 imágenes). Si tienes galería, deja esto vacío."
+        field:
+          label: Imagen
+          name: imagen
+          widget: image
+
+      - label: Descripción 1
+        name: descripcion_1
+        widget: text
+        hint: "Primer párrafo descriptivo del proyecto"
+
+      - label: Descripción 2
+        name: descripcion_2
+        widget: text
+        hint: "Segundo párrafo descriptivo del proyecto"
