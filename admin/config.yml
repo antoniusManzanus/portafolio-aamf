@@ -18,8 +18,8 @@ collections:
     delete: true
     slug: "{{slug}}"
     identifier_field: nombre
-    summary: "{{nombre}} — {{año}}"
-    sortable_fields: [año, nombre, tipo]
+    summary: "{{nombre}} — {{year}}"
+    sortable_fields: [year, nombre, tipo]
     view_filters:
       - label: Residencial
         field: tipo
@@ -43,7 +43,7 @@ collections:
         hint: "Ej: VERACRUZ · MÉXICO"
 
       - label: Año
-        name: año
+        name: year
         widget: number
         value_type: int
         min: 1990
@@ -86,9 +86,9 @@ collections:
         collapsed: false
         hint: "Agrega todas las imágenes del proyecto en orden. Deja vacío si usas imágenes individuales."
         field:
-          label: Imagen
+          label: URL de imagen
           name: imagen
-          widget: image
+          widget: string
 
       - label: Imágenes individuales
         name: imagenes
@@ -96,9 +96,9 @@ collections:
         collapsed: true
         hint: "Solo para proyectos sin galería (máx. 5 imágenes). Si tienes galería, deja esto vacío."
         field:
-          label: Imagen
+          label: URL de imagen
           name: imagen
-          widget: image
+          widget: string
 
       - label: Descripción 1
         name: descripcion_1

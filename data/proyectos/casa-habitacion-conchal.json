@@ -1,7 +1,6 @@
 {
   "nombre": "CASA HABITACIÓN CONCHAL",
   "ubicacion": "EL CONCHAL · VERACRUZ",
-  "año": 2012,
   "tipo": "residencial",
   "programa": "Residencial · Vivienda Unifamiliar",
   "area": "240 m²",
@@ -20,5 +19,6 @@
     "https://i.ibb.co/BHsGJ2Bz/11.jpg"
   ],
   "descripcion_1": "Vivienda unifamiliar de dos niveles emplazada en la localidad de El Conchal, Veracruz. La propuesta arquitectónica explora la tensión entre masa y vacío mediante la superposición de volúmenes prismáticos de concreto aparente, donde el segundo nivel avanza en voladizo sobre la planta baja generando un espacio de sombra que articula la transición entre el exterior y el acceso principal.",
-  "descripcion_2": "El proceso constructivo se desarrolló enteramente en concreto armado con muros de tabique recocido aplanados. La escalera interior, resuelta en madera de cedro rojo con zancas de acero estructural, constituye el elemento escultórico central. El lenguaje formal sobrio y la paleta de materiales sin revestimientos superfluos reflejan una arquitectura de carácter brutalista adaptada al clima cálido-húmedo del Golfo de México."
+  "descripcion_2": "El proceso constructivo se desarrolló enteramente en concreto armado con muros de tabique recocido aplanados. La escalera interior, resuelta en madera de cedro rojo con zancas de acero estructural, constituye el elemento escultórico central. El lenguaje formal sobrio y la paleta de materiales sin revestimientos superfluos reflejan una arquitectura de carácter brutalista adaptada al clima cálido-húmedo del Golfo de México.",
+  "year": 2012
 }

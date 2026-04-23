@@ -1,7 +1,6 @@
 {
   "nombre": "CORPORATIVO SANTANDER",
   "ubicacion": "VERACRUZ · MÉXICO",
-  "año": 2024,
   "tipo": "comercial",
   "programa": "Comercial · Corporativo / Banco",
   "area": "9.200 m²",
@@ -16,5 +15,6 @@
     "https://i.ibb.co/p6nx75hD/3.jpg",
     "https://i.ibb.co/1fXnY1c5/4.jpg",
     "https://i.ibb.co/b5YKD9mX/5.jpg"
-  ]
+  ],
+  "year": 2024
 }

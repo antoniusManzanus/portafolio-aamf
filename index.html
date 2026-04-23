@@ -636,7 +636,7 @@ function renderGrid() {
   const grid = document.getElementById('projectsGrid');
   grid.innerHTML = proyectos.map((p, i) => `
     <div class="project-card"
-      data-year="${p.año}"
+      data-year="${p.year}"
       data-type="${p.tipo}"
       data-slug="${p.slug}"
       style="animation-delay:${(i+1)*0.05}s"
@@ -644,7 +644,7 @@ function renderGrid() {
       <div class="project-img-wrap">
         <img class="project-img" src="${p.portada}" loading="lazy" alt="${p.nombre}">
       </div>
-      <div class="project-name">${p.nombre}<span class="project-year">, ${p.año}</span></div>
+      <div class="project-name">${p.nombre}<span class="project-year">, ${p.year}</span></div>
     </div>
   `).join('');
   updateCounter(proyectos.length, proyectos.length);
@@ -662,7 +662,7 @@ function renderHeaderStrip() {
 
 // ── Sidebar: años únicos ─────────────────────────────────────────────
 function renderSidebarYears() {
-  const years = [...new Set(proyectos.map(p => p.año))].sort((a,b) => b-a);
+  const years = [...new Set(proyectos.map(p => p.year))].sort((a,b) => b-a);
   const yearFilters = document.getElementById('yearFilters');
   const yearIndex = document.getElementById('yearIndex');
   if (yearFilters) yearFilters.innerHTML = years.map(y =>
@@ -792,7 +792,7 @@ function openDetail(slug) {
   document.getElementById('dHeroImg').src = p.portada;
   document.getElementById('dTitleBig').textContent = p.nombre;
   document.getElementById('dTitleLoc').textContent = p.ubicacion;
-  document.getElementById('dYear').textContent = p.año;
+  document.getElementById('dYear').textContent = p.year;
   document.getElementById('dType').textContent = p.programa;
   document.getElementById('dArea').textContent = p.area;
   document.getElementById('dStatus').textContent = p.estado;

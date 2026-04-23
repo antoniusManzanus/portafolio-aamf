@@ -1,7 +1,6 @@
 {
   "nombre": "RESTAURANTE BAR — HOTEL IMPERIAL",
   "ubicacion": "CENTRO HISTÓRICO · VERACRUZ",
-  "año": 2009,
   "tipo": "gastronomia",
   "programa": "Gastronomía · Diseño Interior / Hotel",
   "area": "1.200 m²",
@@ -17,5 +16,6 @@
     "https://i.ibb.co/HpRzwYz3/8.jpg"
   ],
   "descripcion_1": "Proyecto de diseño interior para el restaurante bar del Hotel Imperial, ubicado en el Centro Histórico de Veracruz. El programa integra área de comedor, barra, lobby y habitaciones bajo un concepto náutico que dialoga con la tradición portuaria de la ciudad. Los materiales seleccionados —madera, latón y textiles naturales— evocan la elegancia del período histórico del inmueble.",
-  "descripcion_2": "La intervención respeta la volumetría y los elementos patrimoniales del edificio mientras introduce un lenguaje contemporáneo en los acabados y el mobiliario. La iluminación cálida y controlada refuerza la atmósfera íntima del restaurante, concebido para una experiencia gastronómica de alta categoría en un entorno de valor histórico."
+  "descripcion_2": "La intervención respeta la volumetría y los elementos patrimoniales del edificio mientras introduce un lenguaje contemporáneo en los acabados y el mobiliario. La iluminación cálida y controlada refuerza la atmósfera íntima del restaurante, concebido para una experiencia gastronómica de alta categoría en un entorno de valor histórico.",
+  "year": 2009
 }
