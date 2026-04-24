@@ -1,9 +1,15 @@
 {
   "descripcion_2": "askjdhajkshdasd",
+  "imagenes": [
+    "https://fge.pe/wp-content/uploads/2020/07/servicios-de-construcci%C3%B3n-y-mantenimiento-en-lima-peru.jpg"
+  ],
   "estado": "En construcción",
   "nombre": "TEST",
   "area": "280 m2",
   "tipo": "residencial",
+  "galeria": [
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQIaI8VY2doVVjMVzv9VL158CDtRQb060SXAQ&s"
+  ],
   "year": 2026,
   "portada": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQUfv1JF148Be0esBDJ0Iz4c5DngN9OOjdrRg&s",
   "programa": "Residencial",
