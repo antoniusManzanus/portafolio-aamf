@@ -602,23 +602,25 @@ function updateToggleLabel() {
 }
 document.addEventListener('DOMContentLoaded', updateToggleLabel);
 
-// ── Slugs de proyectos ───────────────────────────────────────────────
-const SLUGS = [
-  'corporativo-santander',
-  '1930-brewing-co',
-  'casa-habitacion-r',
-  'casa-habitacion-conchal',
-  'casa-habitacion-mv',
-  'restaurante-hotel-imperial'
-];
-
 let proyectos = [];
 let currentYear = '', currentType = '';
 
-// ── Carga de datos ───────────────────────────────────────────────────
+// ── Carga de datos — lee índice dinámicamente ────────────────────────
 async function loadProyectos() {
+  // 1. Leer el índice de slugs
+  let slugs = [];
+  try {
+    const idxRes = await fetch('data/proyectos/index.json');
+    const idx = await idxRes.json();
+    slugs = idx.slugs || [];
+  } catch(e) {
+    console.error('No se pudo cargar index.json', e);
+    return;
+  }
+
+  // 2. Cargar cada proyecto en paralelo
   const results = await Promise.all(
-    SLUGS.map(slug =>
+    slugs.map(slug =>
       fetch(`data/proyectos/${slug}.json`)
         .then(r => r.json())
         .then(data => ({ ...data, slug }))

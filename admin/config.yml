@@ -111,3 +111,21 @@ collections:
         name: descripcion_2
         widget: text
         hint: "Segundo párrafo descriptivo del proyecto"
+
+  - name: indice
+    label: Índice de proyectos
+    description: "Lista de slugs de proyectos activos. Se actualiza al agregar o eliminar proyectos."
+    files:
+      - name: slugs
+        label: Slugs activos
+        file: data/proyectos/index.json
+        format: json
+        fields:
+          - label: Slugs
+            name: slugs
+            widget: list
+            hint: "Lista de nombres de archivo de cada proyecto (sin .json). Ej: corporativo-santander"
+            field:
+              label: Slug
+              name: slug
+              widget: string
