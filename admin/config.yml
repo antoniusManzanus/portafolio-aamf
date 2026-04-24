@@ -19,6 +19,8 @@ collections:
     slug: "{{slug}}"
     identifier_field: nombre
     summary: "{{nombre}} — {{year}}"
+    extension: json
+    format: json
     sortable_fields: [year, nombre, tipo]
     view_filters:
       - label: Residencial
