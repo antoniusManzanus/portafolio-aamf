@@ -1,12 +1,855 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Panel AAMF</title>
-  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+<meta charset="UTF-8">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AAMF — Proyectos</title>
+
+<!-- ══ SEO & OPEN GRAPH ══════════════════════════════════════════
+     Para cambiar de dominio: reemplaza la variable BASE_URL
+     en las etiquetas og:url y twitter:url únicamente.
+     ═══════════════════════════════════════════════════════════ -->
+<meta name="description" content="AAMF — Estudio de arquitectura con proyectos residenciales, comerciales y gastronómicos en Veracruz, México.">
+<meta name="author" content="AAMF">
+<meta name="theme-color" content="#f0ede8" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0e0d0b" media="(prefers-color-scheme: dark)">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="AAMF">
+<meta property="og:title" content="AAMF — Estudio de Arquitectura">
+<meta property="og:description" content="Portafolio de arquitectura: proyectos residenciales, comerciales y gastronómicos en Veracruz, México.">
+<meta property="og:image" content="https://i.ibb.co/vxPfSrHd/LOGO-MANZANO.png">
+<meta property="og:url" content="https://iridescent-malasada-2c59e5.netlify.app/">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="AAMF — Estudio de Arquitectura">
+<meta name="twitter:description" content="Portafolio de arquitectura: proyectos residenciales, comerciales y gastronómicos en Veracruz, México.">
+<meta name="twitter:image" content="https://i.ibb.co/vxPfSrHd/LOGO-MANZANO.png">
+<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=DM+Sans:ital,opsz,wght@0,9..40,200;0,9..40,300;0,9..40,400;1,9..40,200&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #f0ede8;
+  --fg: #111;
+  --accent: #b8421a;
+  --muted: #888;
+  --border: #d0ccc5;
+  --card-hover: #e8e4de;
+  --img-placeholder: #d8d4ce;
+  --text-body: #333;
+  --sidebar-chars: #bbb;
+  --mono: 'DM Mono', monospace;
+  --sans: 'DM Sans', sans-serif;
+  --display: 'Bebas Neue', sans-serif;
+}
+
+/* ══════════ MODO OSCURO — automático por sistema ══════════ */
+@media (prefers-color-scheme: dark) {
+  :root:not(.light) {
+    --bg: #0e0d0b;
+    --fg: #f0ede8;
+    --accent: #d4592a;
+    --muted: #6a6660;
+    --border: #2a2825;
+    --card-hover: #181613;
+    --img-placeholder: #1e1c19;
+    --text-body: #c8c4be;
+    --sidebar-chars: #3a3733;
+  }
+}
+
+/* ══════════ MODO OSCURO — forzado por el usuario ══════════ */
+html.dark {
+  --bg: #0e0d0b;
+  --fg: #f0ede8;
+  --accent: #d4592a;
+  --muted: #6a6660;
+  --border: #2a2825;
+  --card-hover: #181613;
+  --img-placeholder: #1e1c19;
+  --text-body: #c8c4be;
+  --sidebar-chars: #3a3733;
+}
+
+/* ══════════ MODO CLARO — forzado por el usuario ══════════ */
+html.light {
+  --bg: #f0ede8;
+  --fg: #111;
+  --accent: #b8421a;
+  --muted: #888;
+  --border: #d0ccc5;
+  --card-hover: #e8e4de;
+  --img-placeholder: #d8d4ce;
+  --text-body: #333;
+  --sidebar-chars: #bbb;
+}
+
+/* ══════════ TRANSICIÓN SUAVE AL CAMBIAR MODO ══════════ */
+html { transition: background-color 0.3s ease, color 0.3s ease; }
+body, .header, .sidebar, .detail-overlay, .d-sidebar, .d-right, .d-title-block, footer {
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--sans);
+  font-size: 13px;
+  line-height: 1.4;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* HEADER STRIP */
+.header-strip {
+  height: 180px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 2px;
+  background: #000;
+  overflow: hidden;
+}
+.hs-cell { position: relative; overflow: hidden; }
+.hs-cell-inner {
+  position: absolute; inset: 0;
+  background-size: cover; background-position: center;
+  opacity: 0.8; transition: opacity 0.4s, transform 0.6s;
+}
+.hs-cell:hover .hs-cell-inner { opacity: 1; transform: scale(1.04); }
+
+/* HEADER BAR */
+.header {
+  display: grid;
+  grid-template-columns: 140px 1fr auto;
+  align-items: center;
+  padding: 0 32px;
+  height: 48px;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  position: sticky; top: 0; z-index: 100;
+}
+.logo { display: flex; align-items: center; cursor: pointer; }
+.logo img { height: 28px; width: auto; display: block; }
+.logo-text { font-family: var(--mono); font-size: 18px; font-weight: 500; letter-spacing: -0.02em; }
+.logo-text span { color: var(--accent); }
+.search-bar input {
+  background: transparent; border: none; border-bottom: 1px solid var(--border);
+  padding: 4px 0; font-family: var(--mono); font-size: 12px; color: var(--fg);
+  width: 240px; outline: none; transition: border-color 0.2s;
+}
+.search-bar input:focus { border-color: var(--fg); }
+.search-bar input::placeholder { color: var(--muted); }
+.header-right { display: flex; align-items: center; gap: 16px; }
+.header-index { font-family: var(--mono); font-size: 20px; font-weight: 300; letter-spacing: -0.03em; color: var(--muted); cursor: pointer; transition: color 0.2s; }
+.header-index:hover { color: var(--fg); }
+.theme-toggle {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--muted);
+  cursor: pointer; user-select: none; white-space: nowrap;
+  background: var(--card-hover); border: 1px solid var(--border);
+  padding: 4px 10px; border-radius: 2px;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.theme-toggle:hover { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+
+/* MAIN LAYOUT */
+.main { display: grid; grid-template-columns: 140px 1fr 80px; min-height: calc(100vh - 230px); }
+
+/* SIDEBAR */
+.sidebar {
+  padding: 28px 0 28px 32px; border-right: 1px solid var(--border);
+  position: sticky; top: 48px; height: calc(100vh - 48px); overflow-y: auto;
+}
+.sidebar nav { display: flex; flex-direction: column; gap: 2px; }
+.nav-link {
+  font-family: var(--mono); font-size: 11px; font-weight: 400; letter-spacing: 0.04em;
+  color: var(--muted); cursor: pointer; padding: 3px 0; transition: color 0.15s; text-transform: uppercase;
+}
+.nav-link.active, .nav-link:hover { color: var(--fg); }
+.nav-link.filter-active { color: var(--accent); font-weight: 500; }
+.nav-link.filter-active::before { content: "▸ "; }
+.nav-link.active { font-weight: 500; }
+.sidebar-section { margin-top: 32px; }
+.sidebar-label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+.project-counter { font-family: var(--mono); font-size: 10px; color: var(--muted); letter-spacing: 0.04em; margin-bottom: 16px; }
+.project-counter span { color: var(--fg); font-weight: 500; }
+
+/* GRID */
+.projects { padding: 28px 28px 60px; }
+.filter-bar { display: flex; gap: 4px; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+.filter-btn {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase;
+  padding: 4px 10px; border: 1px solid var(--border); background: transparent; color: var(--muted);
+  cursor: pointer; transition: all 0.15s;
+}
+.filter-btn:hover, .filter-btn.active { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+.projects-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; }
+.project-card {
+  cursor: pointer; padding: 16px 12px; transition: background 0.2s;
+  border-bottom: 1px solid var(--border); position: relative; overflow: hidden;
+}
+.project-card:hover { background: var(--card-hover); }
+.project-card:hover .project-img { transform: scale(1.03); }
+.project-img-wrap {
+  width: 100%; aspect-ratio: 16/10; overflow: hidden;
+  margin-bottom: 10px; background: var(--img-placeholder); position: relative;
+}
+.project-img-wrap::after {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(circle at center, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0) 70%);
+  opacity: 0; transition: opacity 0.3s ease; pointer-events: none; z-index: 1;
+}
+.project-card:hover .project-img-wrap::after { opacity: 1; }
+.project-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s cubic-bezier(0.25,0.46,0.45,0.94); display: block; }
+.project-name { font-family: var(--mono); font-size: 10px; font-weight: 400; letter-spacing: 0.06em; text-transform: uppercase; color: var(--fg); line-height: 1.5; }
+.project-year { color: var(--muted); }
+.project-card::after {
+  content: '→'; position: absolute; top: 20px; right: 16px; font-family: var(--mono); font-size: 14px;
+  color: var(--fg); opacity: 0; transform: translateX(-4px); transition: opacity 0.2s, transform 0.2s;
+}
+.project-card:hover::after { opacity: 1; transform: translateX(0); }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+.project-card { animation: fadeUp 0.5s both; }
+.project-card:nth-child(1){animation-delay:.05s}.project-card:nth-child(2){animation-delay:.1s}
+.project-card:nth-child(3){animation-delay:.15s}.project-card:nth-child(4){animation-delay:.2s}
+.project-card:nth-child(5){animation-delay:.25s}.project-card:nth-child(6){animation-delay:.3s}
+
+/* RIGHT INDEX */
+.index-panel {
+  padding: 28px 16px 28px 8px; border-left: 1px solid var(--border);
+  position: sticky; top: 48px; height: calc(100vh - 48px);
+}
+.index-label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
+.index-item { font-family: var(--mono); font-size: 10px; letter-spacing: 0.04em; color: var(--muted); padding: 2px 0; cursor: pointer; transition: color 0.15s; }
+.index-item:hover { color: var(--fg); }
+.index-item.bold { font-weight: 500; color: var(--fg); margin-top: 12px; margin-bottom: 4px; }
+
+/* FOOTER */
+footer { padding: 20px 32px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+.footer-nav { display: flex; gap: 32px; }
+.footer-link { font-family: var(--mono); font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); cursor: pointer; transition: color 0.15s; }
+.footer-link:hover { color: var(--fg); }
+
+/* DETAIL OVERLAY */
+.detail-overlay {
+  position: fixed; inset: 0; background: var(--bg); z-index: 999;
+  overflow-y: auto;
+  opacity: 0; pointer-events: none;
+  transform: translateY(12px);
+  transition: opacity 0.4s cubic-bezier(0.16,1,0.3,1), transform 0.4s cubic-bezier(0.16,1,0.3,1);
+}
+.detail-overlay.is-open {
+  opacity: 1; pointer-events: auto; transform: translateY(0);
+}
+.d-sidebar {
+  position: fixed; left: 0; top: 0; bottom: 0; width: 36px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  z-index: 1001; border-right: 1px solid var(--border); background: var(--bg); padding: 20px 0;
+}
+.d-sidebar-chars {
+  writing-mode: vertical-rl; transform: rotate(180deg);
+  font-family: var(--mono); font-size: 9px; letter-spacing: 0.18em;
+  color: var(--sidebar-chars); text-transform: uppercase; line-height: 1; user-select: none;
+}
+.d-sidebar-plus { font-family: var(--mono); font-size: 14px; color: var(--muted); margin-top: 16px; }
+.d-right {
+  position: fixed; right: 0; top: 0; bottom: 0; width: 36px;
+  display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
+  z-index: 1001; border-left: 1px solid var(--border); background: var(--bg);
+  padding-bottom: 32px; cursor: pointer;
+}
+.d-right span {
+  writing-mode: vertical-rl; transform: rotate(180deg);
+  font-family: var(--mono); font-size: 9px; letter-spacing: 0.18em;
+  color: var(--muted); text-transform: lowercase; user-select: none;
+}
+.d-right:hover span { color: var(--fg); }
+.d-close {
+  position: fixed; top: 16px; right: 52px; font-family: var(--mono); font-size: 22px;
+  color: var(--muted); cursor: pointer; z-index: 1002; line-height: 1; transition: color 0.2s;
+}
+.d-close:hover { color: var(--fg); }
+.d-body { margin-left: 36px; margin-right: 36px; padding-bottom: 80px; }
+.d-hero { position: relative; width: 100%; height: 60vh; min-height: 380px; overflow: hidden; }
+.d-hero img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 8s ease; }
+.d-hero:hover img { transform: scale(1.04); }
+.d-title-block {
+  background: var(--bg); padding: 0 48px;
+  overflow: hidden; border-bottom: 1px solid var(--border);
+}
+.d-title-big {
+  font-family: var(--display);
+  font-size: clamp(48px, 10vw, 190px);
+  line-height: 0.88; color: var(--fg);
+  letter-spacing: -0.01em; text-transform: uppercase;
+  padding: 18px 0 6px; overflow: hidden;
+  white-space: nowrap; text-overflow: clip;
+}
+.d-title-loc {
+  font-family: var(--display);
+  font-size: clamp(28px, 5vw, 90px);
+  line-height: 0.9; color: var(--fg);
+  letter-spacing: -0.01em; text-transform: uppercase;
+  padding-bottom: 18px; opacity: 0.85;
+}
+.d-meta {
+  display: flex; gap: 48px; padding: 20px 48px;
+  border-bottom: 1px solid var(--border); flex-wrap: wrap;
+}
+.d-meta-item { display: flex; flex-direction: column; gap: 4px; }
+.d-meta-label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.d-meta-val { font-family: var(--mono); font-size: 12px; color: var(--fg); }
+.d-content { max-width: 640px; margin: 0 auto; padding: 48px 24px; }
+.d-content p { font-family: var(--sans); font-size: 13.5px; line-height: 1.8; color: var(--text-body); margin-bottom: 28px; }
+.d-content img { width: 100%; display: block; margin: 40px 0; }
+.d-img2 { max-width: 640px; margin: 0 auto; padding: 0 24px 60px; }
+.d-img2 img { width: 100%; display: block; }
+@keyframes slideLeft { from { transform: translateX(-40px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+.d-title-big { animation: slideLeft 0.55s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.d-title-loc { animation: slideLeft 0.55s cubic-bezier(0.16, 1, 0.3, 1) 0.07s both; }
+.d-meta { animation: fadeIn 0.5s ease 0.2s both; }
+.d-content { animation: fadeIn 0.5s ease 0.28s both; }
+.d-img2 { animation: fadeIn 0.5s ease 0.35s both; }
+.d-gallery-img { width:100%; display:block; margin-bottom:3px; }
+.d-gallery-text { font-family: var(--sans); font-size: 13.5px; line-height: 1.8; color: var(--text-body); padding: 36px 0 28px; }
+.d-gallery-grid2 { display:grid; grid-template-columns:1fr 1fr; gap:3px; margin-bottom:3px; }
+.d-gallery-grid2 img { width:100%; display:block; object-fit:cover; aspect-ratio:4/3; }
+.d-gallery-section-label {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--muted);
+  padding: 32px 0 12px; border-top: 1px solid var(--border); margin-top: 32px;
+}
+
+/* WhatsApp */
+.wa-btn {
+  position: fixed; bottom: 28px; right: 60px; z-index: 200;
+  background: #25d366; color: #fff; border-radius: 50px;
+  padding: 10px 20px 10px 14px; display: flex; align-items: center; gap: 8px;
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.04em;
+  cursor: pointer; box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+  transition: transform 0.2s, box-shadow 0.2s; text-decoration: none;
+}
+.wa-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
+
+/* ══════════ RESPONSIVE — TABLET (≤1024px) ══════════ */
+@media (max-width: 1024px) {
+  .main { grid-template-columns: 110px 1fr 60px; }
+  .sidebar { padding-left: 16px; }
+  .projects { padding: 20px 16px 60px; }
+  .projects-grid { grid-template-columns: repeat(2, 1fr); }
+  .index-panel { padding: 20px 8px; }
+}
+
+/* ══════════ RESPONSIVE — MÓVIL (≤768px) ══════════ */
+@media (max-width: 768px) {
+
+  /* Header strip — más bajo en móvil */
+  .header-strip { height: 120px; }
+
+  /* Header bar — simplificado */
+  .header {
+    grid-template-columns: auto 1fr;
+    padding: 0 16px;
+    height: 52px;
+    gap: 12px;
+  }
+  .header-right { display: none; }
+  .search-bar input { width: 100%; font-size: 13px; }
+
+  /* Layout principal — una sola columna */
+  .main { grid-template-columns: 1fr; }
+
+  /* Sidebar — oculto por defecto, se muestra con toggle */
+  .sidebar {
+    display: none;
+    position: static;
+    height: auto;
+    padding: 16px;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+  }
+  .sidebar.open { display: block; }
+
+  /* Barra de filtros móvil */
+  .filter-bar {
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 16px;
+  }
+
+  /* Botón para abrir/cerrar sidebar en móvil */
+  .mobile-filter-toggle {
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.06em;
+    text-transform: uppercase; padding: 4px 10px;
+    border: 1px solid var(--border); background: transparent; color: var(--muted);
+    cursor: pointer; transition: all 0.15s;
+  }
+  .mobile-filter-toggle.active { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+
+  /* Grid — 1 columna en móvil */
+  .projects-grid { grid-template-columns: 1fr; }
+  .projects { padding: 16px 12px 80px; }
+
+  /* Panel de índice — oculto en móvil */
+  .index-panel { display: none; }
+
+  /* Footer */
+  footer {
+    flex-direction: column;
+    gap: 12px;
+    padding: 16px;
+    text-align: center;
+  }
+  .footer-nav { gap: 20px; }
+
+  /* WhatsApp — ajustado para no tapar contenido */
+  .wa-btn {
+    bottom: 16px;
+    right: 16px;
+    padding: 10px 16px 10px 12px;
+    font-size: 10px;
+  }
+
+  /* ── DETAIL OVERLAY — MÓVIL ── */
+  .d-sidebar { display: none; }
+  .d-right { display: none; }
+  .d-body { margin-left: 0; margin-right: 0; }
+
+  .d-close {
+    right: 16px;
+    top: 12px;
+    font-size: 28px;
+    background: var(--bg);
+    padding: 4px 8px;
+    border-radius: 4px;
+  }
+
+  .d-hero { height: 45vw; min-height: 200px; }
+
+  .d-title-block { padding: 0 16px; }
+  .d-title-big {
+    font-size: clamp(36px, 11vw, 80px);
+    white-space: normal;
+    word-break: break-word;
+    padding: 14px 0 4px;
+  }
+  .d-title-loc { font-size: clamp(20px, 6vw, 40px); padding-bottom: 12px; }
+
+  .d-meta { gap: 20px; padding: 16px; }
+  .d-meta-label { font-size: 8px; }
+  .d-meta-val { font-size: 11px; }
+
+  .d-content { padding: 28px 16px; }
+  .d-content p { font-size: 13px; }
+
+  .d-img2 { padding: 0 0 32px; }
+
+  .d-gallery-text { font-size: 13px; padding: 24px 16px 20px; }
+  .d-gallery-section-label { padding: 24px 16px 10px; margin-top: 24px; }
+  #dGallery { padding: 0 0 60px; }
+}
+
+/* ══════════ RESPONSIVE — MÓVIL PEQUEÑO (≤400px) ══════════ */
+@media (max-width: 400px) {
+  .d-title-big { font-size: clamp(28px, 10vw, 48px); }
+  .d-meta { gap: 14px; }
+  .d-gallery-grid2 { grid-template-columns: 1fr; }
+}
+</style>
 </head>
 <body>
-  <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+
+<!-- HEADER STRIP -->
+<div class="header-strip" id="headerStrip">
+  <div class="hs-cell"><div class="hs-cell-inner" id="hs1"></div></div>
+  <div class="hs-cell"><div class="hs-cell-inner" id="hs2"></div></div>
+  <div class="hs-cell"><div class="hs-cell-inner" id="hs3"></div></div>
+</div>
+
+<header class="header">
+  <div class="logo">
+    <img src="https://i.ibb.co/vxPfSrHd/LOGO-MANZANO.png" alt="AAMF"
+         onerror="this.style.display='none';this.nextElementSibling.style.display='block';">
+    <span class="logo-text" style="display:none;">AA<span>M</span>F</span>
+  </div>
+  <div class="search-bar"><input type="text" placeholder="Buscar..." id="searchInput" oninput="filterProjects(this.value)"></div>
+  <div class="header-right">
+    <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" aria-label="Cambiar modo">● oscuro</button>
+    <span class="header-index">índice</span>
+  </div>
+</header>
+
+<div class="main">
+  <aside class="sidebar">
+    <nav><div class="nav-link active">Proyectos</div></nav>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Año</div>
+      <div id="yearFilters"></div>
+      <div class="nav-link" onclick="filterYear(\'\')">Todos</div>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Tipo</div>
+      <div class="nav-link" data-type="residencial" onclick="filterType(\'residencial\')">Residencial</div>
+      <div class="nav-link" data-type="comercial" onclick="filterType(\'comercial\')">Comercial</div>
+      <div class="nav-link" data-type="gastronomia" onclick="filterType(\'gastronomia\')">Gastronomía</div>
+      <div class="nav-link" onclick="filterType(\'\')">Todos</div>
+      <div class="nav-link" style="color:var(--accent);margin-top:12px;" onclick="clearFilters()">Limpiar</div>
+    </div>
+  </aside>
+
+  <main class="projects">
+    <div class="filter-bar">
+      <button class="mobile-filter-toggle" id="filterToggle" onclick="toggleSidebar()">Filtros</button>
+      <button class="filter-btn active" onclick="setView(\'grid\',this)">Red</button>
+      <button class="filter-btn" onclick="setView(\'list\',this)">Lista</button>
+    </div>
+    <div class="project-counter" id="projectCounter"></div>
+    <div class="projects-grid" id="projectsGrid">
+      <!-- Tarjetas generadas dinámicamente desde /data/proyectos/ -->
+      <div style="padding:40px;font-family:var(--mono);font-size:11px;color:var(--muted);grid-column:1/-1;">
+        Cargando proyectos...
+      </div>
+    </div>
+  </main>
+
+  <aside class="index-panel">
+    <div class="index-label">Índice</div>
+    <div class="index-item bold">Año</div>
+    <div id="yearIndex"></div>
+    <div class="index-item bold">Vista</div>
+    <div class="index-item" onclick="setView(\'grid\',this)">Red</div>
+    <div class="index-item" onclick="setView(\'list\',this)">Lista</div>
+  </aside>
+</div>
+
+<footer>
+  <div style="font-family:var(--mono);font-size:13px;letter-spacing:-0.02em;font-weight:500;">AAMF</div>
+  <div class="footer-nav">
+    <div class="footer-link">Estudio</div>
+    <div class="footer-link">Contacto</div>
+    <div class="footer-link">© 2026</div>
+  </div>
+</footer>
+
+<!-- WhatsApp flotante -->
+<a class="wa-btn" href="https://wa.me/522291274812?text=Hola%2C%20me%20interesa%20conocer%20m%C3%A1s%20sobre%20sus%20servicios." target="_blank" rel="noopener">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+    <path d="M12 0C5.373 0 0 5.373 0 12c0 2.124.558 4.121 1.533 5.857L.057 23.882l6.19-1.623A11.945 11.945 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.808 9.808 0 0 1-5.028-1.382l-.36-.214-3.733.979 1.003-3.624-.235-.373A9.77 9.77 0 0 1 2.182 12c0-5.418 4.4-9.818 9.818-9.818 5.418 0 9.818 4.4 9.818 9.818 0 5.418-4.4 9.818-9.818 9.818z"/>
+  </svg>
+  Contacto
+</a>
+
+<!-- DETAIL OVERLAY -->
+<div class="detail-overlay" id="detailOverlay">
+  <div class="d-sidebar">
+    <div class="d-sidebar-chars" id="dSidebarChars">AAMF··········</div>
+    <div class="d-sidebar-plus">+</div>
+  </div>
+  <div class="d-right" onclick="closeDetail()"><span>indice ○</span></div>
+  <div class="d-close" onclick="closeDetail()">×</div>
+  <div class="d-body">
+    <div class="d-hero"><img id="dHeroImg" src="" alt=""></div>
+    <div class="d-title-block">
+      <div class="d-title-big" id="dTitleBig">—</div>
+      <div class="d-title-loc" id="dTitleLoc">—</div>
+    </div>
+    <div class="d-meta">
+      <div class="d-meta-item"><span class="d-meta-label">Año</span><span class="d-meta-val" id="dYear">—</span></div>
+      <div class="d-meta-item"><span class="d-meta-label">Programa</span><span class="d-meta-val" id="dType">—</span></div>
+      <div class="d-meta-item"><span class="d-meta-label">Superficie</span><span class="d-meta-val" id="dArea">—</span></div>
+      <div class="d-meta-item"><span class="d-meta-label">Estado</span><span class="d-meta-val" id="dStatus">—</span></div>
+    </div>
+    <div class="d-content" id="dContentStd">
+      <img id="dImg2" src="" alt="" style="margin-bottom:24px;">
+      <p id="dP1"></p>
+      <p id="dP2"></p>
+    </div>
+    <div class="d-img2"><img id="dImg3" src="" alt=""></div>
+    <div class="d-img2" id="dImg4Wrap" style="display:none;"><img id="dImg4" src="" alt=""></div>
+    <div class="d-img2" id="dImg5Wrap" style="display:none;"><img id="dImg5" src="" alt=""></div>
+    <div id="dGallery" style="display:none; max-width:900px; margin:0 auto; padding:0 24px 80px;"></div>
+  </div>
+</div>
+
+<script>
+// ── Modo oscuro / claro ──────────────────────────────────────────────
+(function() {
+  const saved = localStorage.getItem('theme');
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const isDark = saved === 'dark' || (!saved && prefersDark);
+  document.documentElement.classList.toggle('dark', isDark);
+  document.documentElement.classList.toggle('light', !isDark);
+})();
+
+function toggleTheme() {
+  const html = document.documentElement;
+  const isDark = html.classList.contains('dark');
+  html.classList.toggle('dark', !isDark);
+  html.classList.toggle('light', isDark);
+  localStorage.setItem('theme', isDark ? 'light' : 'dark');
+  updateToggleLabel();
+}
+function updateToggleLabel() {
+  const btn = document.getElementById('themeToggle');
+  if (!btn) return;
+  btn.textContent = document.documentElement.classList.contains('dark') ? '● oscuro' : '○ claro';
+}
+document.addEventListener('DOMContentLoaded', updateToggleLabel);
+
+let proyectos = [];
+let currentYear = '', currentType = '';
+
+// ── Carga de datos — lee índice dinámicamente ────────────────────────
+async function loadProyectos() {
+  // 1. Leer el índice de slugs
+  let slugs = [];
+  try {
+    const idxRes = await fetch('data/proyectos/index.json');
+    const idx = await idxRes.json();
+    slugs = idx.slugs || [];
+  } catch(e) {
+    console.error('No se pudo cargar index.json', e);
+    return;
+  }
+
+  // 2. Cargar cada proyecto en paralelo
+  const results = await Promise.all(
+    slugs.map(slug =>
+      fetch(`data/proyectos/${slug}.json`)
+        .then(r => r.json())
+        .then(data => ({ ...data, slug }))
+        .catch(() => null)
+    )
+  );
+  proyectos = results.filter(Boolean);
+  renderGrid();
+  renderSidebarYears();
+  renderHeaderStrip();
+}
+
+// ── Render cuadrícula ────────────────────────────────────────────────
+function renderGrid() {
+  const grid = document.getElementById('projectsGrid');
+  grid.innerHTML = proyectos.map((p, i) => `
+    <div class="project-card"
+      data-year="${p.year}"
+      data-type="${p.tipo}"
+      data-slug="${p.slug}"
+      style="animation-delay:${(i+1)*0.05}s"
+      onclick="openDetail('${p.slug}')">
+      <div class="project-img-wrap">
+        <img class="project-img" src="${p.portada}" loading="lazy" alt="${p.nombre}">
+      </div>
+      <div class="project-name">${p.nombre}<span class="project-year">, ${p.year}</span></div>
+    </div>
+  `).join('');
+  updateCounter(proyectos.length, proyectos.length);
+}
+
+// ── Header strip con las 3 primeras portadas ─────────────────────────
+function renderHeaderStrip() {
+  ['hs1','hs2','hs3'].forEach((id, i) => {
+    const el = document.getElementById(id);
+    if (el && proyectos[i]) {
+      el.style.backgroundImage = `url('${proyectos[i].portada}')`;
+    }
+  });
+}
+
+// ── Sidebar: años únicos ─────────────────────────────────────────────
+function renderSidebarYears() {
+  const years = [...new Set(proyectos.map(p => p.year))].sort((a,b) => b-a);
+  const yearFilters = document.getElementById('yearFilters');
+  const yearIndex = document.getElementById('yearIndex');
+  if (yearFilters) yearFilters.innerHTML = years.map(y =>
+    `<div class="nav-link" data-year="${y}" onclick="filterYear(${y})">${y}</div>`
+  ).join('');
+  if (yearIndex) yearIndex.innerHTML = years.map(y =>
+    `<div class="index-item" onclick="filterYear(${y})">${y}</div>`
+  ).join('');
+}
+
+// ── Filtros ──────────────────────────────────────────────────────────
+function filterProjects(q) {
+  const cards = document.querySelectorAll('.project-card');
+  let visible = 0;
+  cards.forEach(c => {
+    const nm = c.querySelector('.project-name').textContent.toLowerCase();
+    const ms = !q || nm.includes(q.toLowerCase());
+    const my = !currentYear || c.dataset.year === String(currentYear);
+    const mt = !currentType || c.dataset.type === currentType;
+    const show = ms && my && mt;
+    c.style.display = show ? '' : 'none';
+    if (show) visible++;
+  });
+  updateCounter(visible, cards.length);
+  document.querySelectorAll('.sidebar .nav-link[data-year]').forEach(el => {
+    el.classList.toggle('filter-active', String(el.dataset.year) === String(currentYear) && currentYear !== '');
+  });
+  document.querySelectorAll('.sidebar .nav-link[data-type]').forEach(el => {
+    el.classList.toggle('filter-active', el.dataset.type === currentType && currentType !== '');
+  });
+}
+function updateCounter(visible, total) {
+  const el = document.getElementById('projectCounter');
+  if (el) el.innerHTML = visible < total
+    ? `Mostrando <span>${visible}</span> de <span>${total}</span> proyectos` : '';
+}
+function filterYear(y) {
+  currentYear = currentYear == y ? '' : y;
+  filterProjects(document.getElementById('searchInput').value);
+}
+function filterType(t) {
+  currentType = currentType === t ? '' : t;
+  filterProjects(document.getElementById('searchInput').value);
+}
+function clearFilters() {
+  currentYear = ''; currentType = '';
+  document.getElementById('searchInput').value = '';
+  filterProjects('');
+}
+
+// ── Vista grid / lista ───────────────────────────────────────────────
+function setView(view, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  const grid = document.getElementById('projectsGrid');
+  if (view === 'list') {
+    grid.style.gridTemplateColumns = '1fr';
+    document.querySelectorAll('.project-card').forEach(c => { c.style.display='flex'; c.style.alignItems='center'; c.style.gap='20px'; c.style.padding='12px'; });
+    document.querySelectorAll('.project-img-wrap').forEach(w => { w.style.width='120px'; w.style.minWidth='120px'; w.style.aspectRatio='16/10'; w.style.marginBottom='0'; });
+  } else {
+    grid.style.gridTemplateColumns = 'repeat(3, 1fr)';
+    document.querySelectorAll('.project-card').forEach(c => { c.style.display=''; c.style.alignItems=''; c.style.gap=''; c.style.padding=''; });
+    document.querySelectorAll('.project-img-wrap').forEach(w => { w.style.width=''; w.style.minWidth=''; w.style.aspectRatio=''; w.style.marginBottom=''; });
+  }
+}
+
+// ── Sidebar móvil ────────────────────────────────────────────────────
+function toggleSidebar() {
+  const sidebar = document.querySelector('.sidebar');
+  const btn = document.getElementById('filterToggle');
+  sidebar.classList.toggle('open');
+  btn.classList.toggle('active');
+  btn.textContent = sidebar.classList.contains('open') ? 'Cerrar' : 'Filtros';
+}
+
+// ── Galería ──────────────────────────────────────────────────────────
+function buildGallery(el, imgs, p1, p2) {
+  const n = imgs.length;
+  let html = '';
+  if (n >= 10) {
+    html = `
+      <p class="d-gallery-section-label">— OBRA TERMINADA</p>
+      <img class="d-gallery-img" src="${imgs[0]}" alt="">
+      <img class="d-gallery-img" src="${imgs[1]}" alt="" style="margin-top:3px;">
+      <p class="d-gallery-text">${p1}</p>
+      <p class="d-gallery-section-label">— PROCESO DE OBRA</p>
+      <div class="d-gallery-grid2"><img src="${imgs[2]}" alt=""><img src="${imgs[3]}" alt=""></div>
+      <div class="d-gallery-grid2" style="margin-top:3px;"><img src="${imgs[4]}" alt=""><img src="${imgs[5]}" alt=""></div>
+      <div class="d-gallery-grid2" style="margin-top:3px;"><img src="${imgs[6]}" alt=""><img src="${imgs[7]}" alt=""></div>
+      <p class="d-gallery-text">${p2}</p>
+      <p class="d-gallery-section-label">— PROYECTO Y RENDER</p>
+      <img class="d-gallery-img" src="${imgs[8]}" alt="">
+      <img class="d-gallery-img" src="${imgs[9]}" alt="" style="margin-top:3px;">
+      ${n > 10 ? `<img class="d-gallery-img" src="${imgs[10]}" alt="" style="margin-top:3px;">` : ''}
+    `;
+  } else if (n >= 7) {
+    html = `
+      <img class="d-gallery-img" src="${imgs[0]}" alt="">
+      <img class="d-gallery-img" src="${imgs[1]}" alt="" style="margin-top:3px;">
+      <p class="d-gallery-text">${p1}</p>
+      <div class="d-gallery-grid2"><img src="${imgs[2]}" alt=""><img src="${imgs[3]}" alt=""></div>
+      <div class="d-gallery-grid2" style="margin-top:3px;"><img src="${imgs[4]}" alt=""><img src="${imgs[5]}" alt=""></div>
+      <p class="d-gallery-text">${p2}</p>
+      ${imgs.slice(6).map(u => `<img class="d-gallery-img" src="${u}" alt="" style="margin-top:3px;">`).join('')}
+    `;
+  } else {
+    html = `
+      <img class="d-gallery-img" src="${imgs[0]}" alt="">
+      <p class="d-gallery-text">${p1}</p>
+      <div class="d-gallery-grid2">${imgs.slice(1,5).map(u=>`<img src="${u}" alt="">`).join('')}</div>
+      <p class="d-gallery-text">${p2}</p>
+      ${imgs.slice(5).map(u=>`<img class="d-gallery-img" src="${u}" alt="" style="margin-top:3px;">`).join('')}
+    `;
+  }
+  el.innerHTML = html;
+}
+
+// ── Overlay detalle ──────────────────────────────────────────────────
+function openDetail(slug) {
+  const p = proyectos.find(x => x.slug === slug);
+  if (!p) return;
+  const ov = document.getElementById('detailOverlay');
+  ov.scrollTop = 0;
+  ov.classList.add('is-open');
+  document.body.style.overflow = 'hidden';
+
+  document.getElementById('dHeroImg').src = p.portada;
+  document.getElementById('dTitleBig').textContent = p.nombre;
+  document.getElementById('dTitleLoc').textContent = p.ubicacion;
+  document.getElementById('dYear').textContent = p.year;
+  document.getElementById('dType').textContent = p.programa;
+  document.getElementById('dArea').textContent = p.area;
+  document.getElementById('dStatus').textContent = p.estado;
+  document.getElementById('dSidebarChars').textContent =
+    p.nombre.replace(/[^A-Za-z]/g,'').toUpperCase().padEnd(14,'·').slice(0,14);
+
+  const galleryEl = document.getElementById('dGallery');
+  const imgs = p.galeria || [];
+
+  if (imgs.length > 0) {
+    document.getElementById('dContentStd').style.display = 'none';
+    document.getElementById('dImg3').parentElement.style.display = 'none';
+    document.getElementById('dImg4Wrap').style.display = 'none';
+    document.getElementById('dImg5Wrap').style.display = 'none';
+    galleryEl.style.display = '';
+    buildGallery(galleryEl, imgs, p.descripcion_1, p.descripcion_2);
+  } else {
+    // Modo estándar (Corporativo Santander)
+    const imagenes = p.imagenes || [];
+    document.getElementById('dContentStd').style.display = '';
+    document.getElementById('dImg3').parentElement.style.display = '';
+    galleryEl.style.display = 'none';
+    document.getElementById('dImg2').src = imagenes[1] || '';
+    document.getElementById('dImg3').src = imagenes[2] || '';
+    document.getElementById('dImg4Wrap').style.display = imagenes[3] ? '' : 'none';
+    if (imagenes[3]) document.getElementById('dImg4').src = imagenes[3];
+    document.getElementById('dImg5Wrap').style.display = imagenes[4] ? '' : 'none';
+    if (imagenes[4]) document.getElementById('dImg5').src = imagenes[4];
+    document.getElementById('dP1').textContent = p.descripcion_1;
+    document.getElementById('dP2').textContent = p.descripcion_2;
+  }
+}
+
+function closeDetail() {
+  const ov = document.getElementById('detailOverlay');
+  ov.classList.remove('is-open');
+  setTimeout(() => { document.body.style.overflow = ''; }, 400);
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDetail(); });
+
+// ── Inicializar ──────────────────────────────────────────────────────
+loadProyectos();
+</script>
+<script>
+  // Netlify Identity — redirige al panel /admin tras el login
+  if (window.netlifyIdentity) {
+    window.netlifyIdentity.on('init', user => {
+      if (!user) {
+        window.netlifyIdentity.on('login', () => {
+          document.location.href = '/admin/';
+        });
+      }
+    });
+  }
+</script>
 </body>
 </html>
