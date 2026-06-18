@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AAMF — Contacto</title>
+<link rel="icon" type="image/png" href="https://i.ibb.co/vxPfSrHd/LOGO-MANZANO.png">
+<link rel="apple-touch-icon" href="https://i.ibb.co/vxPfSrHd/LOGO-MANZANO.png">
+<meta name="description" content="Contacto — AAMF Estudio de Arquitectura, Veracruz México.">
+<meta name="theme-color" content="#f0ede8" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0e0d0b" media="(prefers-color-scheme: dark)">
+<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=DM+Sans:ital,opsz,wght@0,9..40,200;0,9..40,300;0,9..40,400;1,9..40,200&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #f0ede8;
+  --fg: #111;
+  --accent: #b8421a;
+  --muted: #888;
+  --border: #d0ccc5;
+  --card-hover: #e8e4de;
+  --img-placeholder: #d8d4ce;
+  --text-body: #333;
+  --sidebar-chars: #bbb;
+  --filter-active-bg: #b8421a;
+  --filter-active-fg: #fff;
+  --mono: 'DM Mono', monospace;
+  --sans: 'DM Sans', sans-serif;
+  --display: 'Bebas Neue', sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not(.light) {
+    --bg: #0e0d0b; --fg: #f0ede8; --accent: #d4592a;
+    --muted: #6a6660; --border: #2a2825; --card-hover: #181613;
+    --img-placeholder: #1e1c19; --text-body: #c8c4be; --sidebar-chars: #3a3733;
+    --filter-active-bg: #d4592a; --filter-active-fg: #fff;
+  }
+}
+html.dark {
+  --bg: #0e0d0b; --fg: #f0ede8; --accent: #d4592a;
+  --muted: #6a6660; --border: #2a2825; --card-hover: #181613;
+  --img-placeholder: #1e1c19; --text-body: #c8c4be; --sidebar-chars: #3a3733;
+  --filter-active-bg: #d4592a; --filter-active-fg: #fff;
+}
+html.light {
+  --bg: #f0ede8; --fg: #111; --accent: #b8421a;
+  --muted: #888; --border: #d0ccc5; --card-hover: #e8e4de;
+  --img-placeholder: #d8d4ce; --text-body: #333; --sidebar-chars: #bbb;
+  --filter-active-bg: #b8421a; --filter-active-fg: #fff;
+}
+html { transition: background-color 0.3s ease; }
+body, .header, footer {
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+html.no-transition,
+html.no-transition body,
+html.no-transition .header {
+  transition: none !important;
+}
+
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg); color: var(--fg);
+  font-family: var(--sans); font-size: 13px;
+  line-height: 1.4; min-height: 100vh; overflow-x: hidden;
+}
+
+/* ── HEADER ── */
+.header {
+  display: grid;
+  grid-template-columns: 140px 1fr auto;
+  align-items: center;
+  padding: 0 32px; height: 48px;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  position: sticky; top: 0; z-index: 100;
+}
+.logo { display: flex; align-items: center; cursor: pointer; }
+.logo img { height: 28px; width: auto; display: block; }
+.logo-stack { position: relative; height: 28px; }
+.logo-img-light,
+.logo-img-dark  { height: 28px; width: auto; display: block; transition: opacity 0.25s ease; }
+.logo-img-dark  { position: absolute; top: 0; left: 0; opacity: 0; }
+html.dark .logo-img-light { opacity: 0; }
+html.dark .logo-img-dark  { opacity: 1; }
+.logo-text { font-family: var(--mono); font-size: 18px; font-weight: 500; letter-spacing: -0.02em; }
+.logo-text span { color: var(--accent); }
+.header-nav { display: flex; gap: 24px; justify-content: center; margin-right: 24px; }
+.nav-item {
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--muted);
+  cursor: pointer; transition: color 0.2s; text-decoration: none;
+}
+.nav-item:hover, .nav-item.active { color: var(--fg); }
+.nav-item.active { font-weight: 500; }
+.header-right { display: flex; align-items: center; gap: 16px; }
+.theme-toggle {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--muted);
+  cursor: pointer; user-select: none; white-space: nowrap;
+  background: var(--card-hover); border: 1px solid var(--border);
+  padding: 4px 10px; border-radius: 2px;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.theme-toggle:hover { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+
+/* ── CONTACT LAYOUT ── */
+.contact-wrap {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 80px 32px 120px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: start;
+}
+
+/* ── LEFT COLUMN — título + datos ── */
+.contact-left {}
+
+.contact-title-big {
+  font-family: var(--display);
+  font-size: clamp(64px, 10vw, 160px);
+  line-height: 0.88;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  color: var(--fg);
+  margin-bottom: 48px;
+}
+
+.contact-divider {
+  width: 40px; height: 1px;
+  background: var(--accent);
+  margin-bottom: 32px;
+}
+
+.contact-name {
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--fg);
+  margin-bottom: 4px;
+}
+
+.contact-title-role {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 40px;
+}
+
+.contact-desc {
+  font-family: var(--sans);
+  font-size: 13.5px;
+  line-height: 1.8;
+  color: var(--text-body);
+  max-width: 380px;
+  margin-bottom: 48px;
+}
+
+/* ── DATA ITEMS ── */
+.contact-data { display: flex; flex-direction: column; gap: 0; }
+.contact-data-item {
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  gap: 12px;
+  align-items: baseline;
+  padding: 14px 0;
+  border-top: 1px solid var(--border);
+}
+.contact-data-item:last-child { border-bottom: 1px solid var(--border); }
+.contact-data-label {
+  font-family: var(--mono); font-size: 9px;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--muted);
+}
+.contact-data-value {
+  font-family: var(--mono); font-size: 12px;
+  color: var(--fg); text-decoration: none;
+  transition: color 0.2s;
+}
+a.contact-data-value:hover { color: var(--accent); }
+
+/* ── RIGHT COLUMN — redes sociales ── */
+.contact-right { padding-top: 16px; }
+
+.contact-section-label {
+  font-family: var(--mono); font-size: 9px;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 24px;
+}
+
+.social-list { display: flex; flex-direction: column; gap: 0; }
+
+.social-item {
+  display: flex; align-items: center;
+  justify-content: space-between;
+  padding: 18px 0;
+  border-top: 1px solid var(--border);
+  text-decoration: none;
+  transition: background 0.15s;
+  cursor: pointer;
+}
+.social-item:last-child { border-bottom: 1px solid var(--border); }
+.social-item:hover .social-name { color: var(--accent); }
+.social-item:hover .social-arrow { opacity: 1; transform: translateX(0); }
+
+.social-left { display: flex; align-items: center; gap: 16px; }
+
+.social-icon {
+  width: 36px; height: 36px;
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.15s, border-color 0.15s;
+}
+.social-item:hover .social-icon {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+.social-icon svg { transition: fill 0.15s, stroke 0.15s; }
+.social-item:hover .social-icon svg { fill: #fff; stroke: #fff; }
+
+.social-name {
+  font-family: var(--mono); font-size: 13px;
+  font-weight: 400; letter-spacing: 0.04em;
+  color: var(--fg); transition: color 0.2s;
+  text-transform: uppercase;
+}
+
+.social-arrow {
+  font-family: var(--mono); font-size: 16px;
+  color: var(--fg); opacity: 0;
+  transform: translateX(-6px);
+  transition: opacity 0.2s, transform 0.2s;
+}
+
+/* ── CTA WhatsApp grande ── */
+.contact-cta {
+  margin-top: 48px;
+  display: inline-flex; align-items: center; gap: 12px;
+  background: #25d366; color: #fff;
+  font-family: var(--mono); font-size: 11px;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  padding: 14px 24px; border-radius: 2px;
+  text-decoration: none;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+}
+.contact-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.18); }
+
+/* ── LOCATION ── */
+.contact-location {
+  margin-top: 64px;
+  padding-top: 40px;
+  border-top: 1px solid var(--border);
+}
+.location-label {
+  font-family: var(--mono); font-size: 9px;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 12px;
+}
+.location-value {
+  font-family: var(--display);
+  font-size: clamp(28px, 4vw, 56px);
+  line-height: 0.9; color: var(--fg);
+  text-transform: uppercase; letter-spacing: -0.01em;
+}
+
+/* ── FOOTER ── */
+footer {
+  padding: 20px 32px;
+  border-top: 1px solid var(--border);
+  display: flex; justify-content: space-between; align-items: center;
+}
+.footer-copy { font-family: var(--mono); font-size: 10px; letter-spacing: 0.04em; color: var(--muted); }
+.footer-mobile-nav { display: none; }
+.footer-mobile-link {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--muted);
+  text-decoration: none; transition: color 0.2s;
+}
+.footer-mobile-link:hover { color: var(--fg); }
+
+/* ── WA BUTTON ── */
+.wa-btn {
+  position: fixed; bottom: 28px; right: 60px; z-index: 200;
+  background: #25d366; color: #fff; border-radius: 50px;
+  padding: 10px 20px 10px 14px;
+  display: flex; align-items: center; gap: 8px;
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.04em;
+  cursor: pointer; box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+  transition: transform 0.2s, box-shadow 0.2s; text-decoration: none;
+}
+.wa-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
+
+/* ── LOADING ── */
+.loading {
+  padding: 80px 32px;
+  font-family: var(--mono); font-size: 11px; color: var(--muted);
+  text-align: center;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+  .header {
+    grid-template-columns: auto 1fr auto;
+    padding: 0 16px; height: 52px; gap: 8px;
+  }
+  .header-nav { display: none; }
+  .theme-toggle { font-size: 9px; padding: 3px 7px; }
+
+  .contact-wrap {
+    grid-template-columns: 1fr;
+    gap: 48px;
+    padding: 40px 16px 80px;
+  }
+  .contact-title-big { font-size: clamp(56px, 18vw, 100px); }
+  .contact-data-item { grid-template-columns: 80px 1fr; }
+  footer { flex-direction: column; gap: 16px; padding: 20px 16px; text-align: center; }
+  .footer-mobile-nav { display: flex; gap: 40px; }
+  .wa-btn { bottom: 16px; right: 16px; }
+}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="logo" onclick="window.location.href='index.html'">
+    <div class="logo-stack">
+      <img class="logo-img-light" src="https://i.ibb.co/vxPfSrHd/LOGO-MANZANO.png" alt="AAMF">
+      <img class="logo-img-dark"  src="https://i.ibb.co/hxZ6KHXq/LOGO-MANZANO-invert.png" alt="AAMF">
+    </div>
+    <span class="logo-text" style="display:none;">AA<span style="color:var(--accent)">M</span>F</span>
+  </div>
+  <nav class="header-nav">
+    <a class="nav-item" href="index.html">Proyectos</a>
+    <a class="nav-item active" href="contacto.html">Contacto</a>
+    <a class="nav-item" href="perfil.html">Perfil</a>
+  </nav>
+  <div class="header-right">
+    <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" aria-label="Cambiar modo"></button>
+  </div>
+</header>
+
+<div id="contactContent" class="loading">Cargando...</div>
+
+<footer>
+  <div style="font-family:var(--mono);font-size:13px;letter-spacing:-0.02em;font-weight:500;">AAMF</div>
+  <div class="footer-mobile-nav">
+    <a class="footer-mobile-link" href="perfil.html">Perfil</a>
+    <a class="footer-mobile-link" href="index.html">Proyectos</a>
+  </div>
+  <div class="footer-copy">Alberto Manzano · Arquitecto · Veracruz, México · © 2026</div>
+</footer>
+
+<!-- WhatsApp flotante -->
+<a class="wa-btn" id="waBtn" href="javascript:void(0)" target="_blank" rel="noopener">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+    <path d="M12 0C5.373 0 0 5.373 0 12c0 2.124.558 4.121 1.533 5.857L.057 23.882l6.19-1.623A11.945 11.945 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.808 9.808 0 0 1-5.028-1.382l-.36-.214-3.733.979 1.003-3.624-.235-.373A9.77 9.77 0 0 1 2.182 12c0-5.418 4.4-9.818 9.818-9.818 5.418 0 9.818 4.4 9.818 9.818 0 5.418-4.4 9.818-9.818 9.818z"/>
+  </svg>
+  Contacto
+</a>
+
+<script>
+// ── Modo oscuro / claro ──────────────────────────────────────────────
+const safeStorage = {
+  get(key) {
+    try { return localStorage.getItem(key); } catch { return null; }
+  },
+  set(key, val) {
+    try { localStorage.setItem(key, val); } catch { /* silencioso */ }
+  }
+};
+
+(function() {
+  const saved = safeStorage.get('theme');
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const isDark = saved === 'dark' || (!saved && prefersDark);
+  document.documentElement.classList.toggle('dark', isDark);
+  document.documentElement.classList.toggle('light', !isDark);
+  const btn = document.getElementById('themeToggle');
+  if (btn) btn.textContent = isDark ? '● oscuro' : '○ claro';
+  document.documentElement.classList.add('no-transition');
+})();
+
+function updateThemeAssets() {
+  // El logo se gestiona por CSS (opacity stack) — sin swap de src necesario
+}
+
+function toggleTheme() {
+  const html = document.documentElement;
+  const wasDark = html.classList.contains('dark'); // estado ANTES del toggle
+  html.classList.toggle('dark',  !wasDark); // nuevo estado: invertir
+  html.classList.toggle('light',  wasDark); // light = opuesto de dark
+  safeStorage.set('theme', wasDark ? 'light' : 'dark');
+  updateToggleLabel();
+  updateThemeAssets();
+}
+function updateToggleLabel() {
+  const btn = document.getElementById('themeToggle');
+  if (!btn) return;
+  btn.textContent = document.documentElement.classList.contains('dark') ? '● oscuro' : '○ claro';
+}
+document.addEventListener('DOMContentLoaded', () => {
+  document.documentElement.classList.remove('no-transition');
+  updateToggleLabel();
+  updateThemeAssets();
+});
+
+// ── SVG íconos de redes sociales ─────────────────────────────────────
+const ICONS = {
+  LinkedIn: `<svg width="18" height="18" viewBox="0 0 24 24" fill="var(--fg)"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>`,
+  Instagram: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--fg)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>`,
+  Facebook: `<svg width="18" height="18" viewBox="0 0 24 24" fill="var(--fg)"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>`,
+  TikTok: `<svg width="18" height="18" viewBox="0 0 24 24" fill="var(--fg)"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.75a4.85 4.85 0 0 1-1.01-.06z"/></svg>`,
+  Pinterest: `<svg width="18" height="18" viewBox="0 0 24 24" fill="var(--fg)"><path d="M12 0C5.373 0 0 5.373 0 12c0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738a.36.36 0 0 1 .083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.632-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0z"/></svg>`,
+};
+
+// ── Carga de datos ────────────────────────────────────────────────────
+async function loadContacto() {
+  let data;
+  try {
+    const res = await fetch('data/contacto.json');
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    data = await res.json();
+  } catch(e) {
+    document.getElementById('contactContent').innerHTML =
+      '<p style="padding:40px;font-family:var(--mono);color:var(--muted)">No se pudo cargar la informaci\u00f3n de contacto.</p>';
+    return;
+  }
+
+  // Set WhatsApp buttons
+  const waUrl = `https://wa.me/52${data.telefono}?text=Hola%2C%20me%20interesa%20conocer%20m%C3%A1s%20sobre%20sus%20servicios.`;
+  const waBtn = document.getElementById('waBtn');
+  if (waBtn) waBtn.href = waUrl;
+
+  // Filter and sort active social networks
+  const redes = (data.redes || [])
+    .filter(r => r.activa)
+    .sort((a, b) => (a.orden || 99) - (b.orden || 99));
+
+  const socialsHTML = redes.map(r => `
+    <a class="social-item" href="${r.url}" target="_blank" rel="noopener">
+      <div class="social-left">
+        <div class="social-icon">
+          ${ICONS[r.nombre] || `<span style="font-family:var(--mono);font-size:9px;color:var(--muted)">${r.nombre[0]}</span>`}
+        </div>
+        <span class="social-name">${r.nombre}</span>
+      </div>
+      <span class="social-arrow">→</span>
+    </a>
+  `).join('');
+
+  // Formatear teléfono: 10 dígitos → 229 127 4812
+  const telFormateado = data.telefono.replace(/(\d{3})(\d{3})(\d{4})/, '$1 $2 $3');
+
+  document.getElementById('contactContent').innerHTML = `
+    <div class="contact-wrap">
+
+      <!-- COLUMNA IZQUIERDA -->
+      <div class="contact-left">
+        <div class="contact-title-big">CON<br>TAC<br>TO</div>
+        <div class="contact-divider"></div>
+        <div class="contact-name">${data.nombre}</div>
+        <div class="contact-title-role">${data.titulo || 'Arquitecto'}</div>
+        ${data.descripcion ? `<p class="contact-desc">${data.descripcion}</p>` : ''}
+
+        <div class="contact-data">
+          <div class="contact-data-item">
+            <span class="contact-data-label">Tel\u00e9fono</span>
+            <a class="contact-data-value" href="tel:+52${data.telefono}">+52 ${telFormateado}</a>
+          </div>
+          <div class="contact-data-item">
+            <span class="contact-data-label">WhatsApp</span>
+            <a class="contact-data-value" href="${waUrl}" target="_blank" rel="noopener">+52 ${telFormateado}</a>
+          </div>
+          <div class="contact-data-item">
+            <span class="contact-data-label">Correo</span>
+            <a class="contact-data-value" href="mailto:${data.correo}">${data.correo}</a>
+          </div>
+        </div>
+
+        <a class="contact-cta" href="${waUrl}" target="_blank" rel="noopener">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+            <path d="M12 0C5.373 0 0 5.373 0 12c0 2.124.558 4.121 1.533 5.857L.057 23.882l6.19-1.623A11.945 11.945 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.808 9.808 0 0 1-5.028-1.382l-.36-.214-3.733.979 1.003-3.624-.235-.373A9.77 9.77 0 0 1 2.182 12c0-5.418 4.4-9.818 9.818-9.818 5.418 0 9.818 4.4 9.818 9.818 0 5.418-4.4 9.818-9.818 9.818z"/>
+          </svg>
+          Iniciar conversaci\u00f3n
+        </a>
+
+        <div class="contact-location">
+          <div class="location-label">\u2014 Ubicaci\u00f3n</div>
+          <div class="location-value">${data.ubicacion.replace(/,\s*/g, ',<br>')}</div>
+        </div>
+      </div>
+
+      <!-- COLUMNA DERECHA -->
+      <div class="contact-right">
+        <div class="contact-section-label">\u2014 Redes sociales</div>
+        <div class="social-list">
+          ${socialsHTML || '<p style="font-family:var(--mono);font-size:11px;color:var(--muted);padding:20px 0;">No hay redes sociales activas.</p>'}
+        </div>
+      </div>
+
+    </div>
+  `;
+}
+
+loadContacto();
+</script>
+<script>
+  // Netlify Identity — redirige al panel /admin tras el login
+  if (window.netlifyIdentity) {
+    window.netlifyIdentity.on('init', user => {
+      if (!user) {
+        window.netlifyIdentity.on('login', () => {
+          document.location.href = '/admin/';
+        });
+      }
+    });
+  }
+</script>
+</body>
+</html>

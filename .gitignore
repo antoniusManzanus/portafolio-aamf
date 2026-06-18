@@ -1,0 +1,28 @@
+# Directorios ignorados
+/old/
+/workflow de verificacion de bugs/
+/.opencode/
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# Editores
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Node.js (por si acaso)
+node_modules/
+package-lock.json
+
+# Entorno
+.env
+.env.local
+
+# Logs y temporales
+*.log
+*.tmp
+*.temp
+.cache/

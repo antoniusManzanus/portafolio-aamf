@@ -56,8 +56,34 @@ collections:
         widget: select
         options:
           - { label: Residencial, value: residencial }
+          - { label: Multifamiliar, value: multifamiliar }
+          - { label: Vivienda Vertical, value: vivienda-vertical }
+          - { label: Hospitality, value: hospitality }
+          - { label: Hotelero, value: hotelero }
+          - { label: Gastronómica, value: gastronomia }
+          - { label: Bars & Lounge, value: bars-lounge }
           - { label: Comercial, value: comercial }
-          - { label: Gastronomía, value: gastronomia }
+          - { label: Retail, value: retail }
+          - { label: Corporativo / Oficinas, value: corporativo }
+          - { label: Interiorismo, value: interiorismo }
+          - { label: Interior Design, value: interior-design }
+          - { label: Paisajismo, value: paisajismo }
+          - { label: Landscape Design, value: landscape-design }
+          - { label: Uso Mixto, value: uso-mixto }
+          - { label: Mixed Use, value: mixed-use }
+          - { label: Cultural, value: cultural }
+          - { label: Educativo, value: educativo }
+          - { label: Wellness, value: wellness }
+          - { label: Espacio Público, value: espacio-publico }
+          - { label: Master Planning, value: master-planning }
+          - { label: Diseño Urbano, value: diseno-urbano }
+          - { label: Salud / Clínicas, value: salud }
+          - { label: Industrial, value: industrial }
+          - { label: Remodelación & Restauración, value: remodelacion }
+          - { label: Arquitectura Sustentable, value: sustentable }
+          - { label: Espacios Recreativos, value: recreativo }
+          - { label: Rooftops & Beach Clubs, value: rooftops }
+          - { label: Diseño Conceptual, value: diseno-conceptual }
 
       - label: Programa
         name: programa
@@ -77,30 +103,54 @@ collections:
           - { label: En construcción, value: En construcción }
           - { label: Proyecto, value: Proyecto }
 
+      # BUG-8 CORREGIDO: era widget:image, que sube archivos al media_folder local.
+      # Todas las imágenes del proyecto son URLs externas (ibb.co). Se cambia a
+      # widget:string para que el editor pegue la URL directamente, igual que galería.
       - label: Imagen de portada
         name: portada
-        widget: image
-        hint: "Imagen principal que aparece en la cuadrícula de proyectos"
+        widget: string
+        hint: "URL directa de la imagen de portada. Ej: https://i.ibb.co/xxxxx/1.jpg"
 
       - label: Galería de imágenes
         name: galeria
         widget: list
         collapsed: false
-        hint: "Agrega todas las imágenes del proyecto en orden. Deja vacío si usas imágenes individuales."
+        hint: "Agrega todas las imágenes del proyecto en orden."
         field:
           label: URL de imagen
           name: imagen
           widget: string
 
-      - label: Imágenes individuales
-        name: imagenes
-        widget: list
+      # BUG-4 CORREGIDO: campo 'imagenes' eliminado. Era un duplicado huérfano de 'galeria'
+      # que nunca existía en los JSON. Al guardar desde el CMS hubiera contaminado
+      # todos los archivos con un array vacío "imagenes": [].
+
+      - label: Colaboración
+        name: colaboracion
+        widget: object
         collapsed: true
-        hint: "Solo para proyectos sin galería (máx. 5 imágenes). Si tienes galería, deja esto vacío."
-        field:
-          label: URL de imagen
-          name: imagen
-          widget: string
+        hint: "Si el proyecto es de autoría propia, desactiva esto. Si Alberto participó en rol técnico dentro de otro despacho, actívalo y selecciona el rol."
+        fields:
+          - label: Proyecto en colaboración
+            name: activa
+            widget: boolean
+            default: false
+          - label: Roles en el proyecto
+            name: roles
+            widget: list
+            required: false
+            hint: "Agrega uno o más roles que tuvo Alberto en este proyecto."
+            field:
+              label: Rol
+              name: rol
+              widget: select
+              options:
+                - { label: Diseño, value: Diseño }
+                - { label: Supervisión, value: Supervisión }
+                - { label: Residente de Obra, value: Residente de Obra }
+                - { label: Residente Técnico, value: Residente Técnico }
+                - { label: Superintendente de Obra, value: Superintendente de Obra }
+                - { label: Project Manager, value: Project Manager }
 
       - label: Descripción 1
         name: descripcion_1
@@ -129,3 +179,75 @@ collections:
               label: Slug
               name: slug
               widget: string
+
+  - name: perfil
+    label: Perfil del arquitecto
+    files:
+      - name: perfil
+        label: Datos de perfil
+        file: data/perfil.json
+        format: json
+        fields:
+          - { label: Nombre completo, name: nombre, widget: string }
+          - { label: Título / Rol, name: titulo, widget: string, hint: "Ej: Arquitecto" }
+          - { label: URL de foto, name: foto, widget: string, hint: "URL directa de la imagen de perfil" }
+          - { label: Síntesis profesional, name: sintesis, widget: text, hint: "Párrafo breve de presentación. 2-3 oraciones." }
+          - label: Áreas de práctica
+            name: areas
+            widget: list
+            hint: "Disciplinas que aparecen como chips. Ej: Residencial, Comercial, Gastronomía."
+            field:
+              label: Área
+              name: area
+              widget: string
+          - label: Experiencia laboral
+            name: experiencia
+            widget: list
+            collapsed: false
+            hint: "Una entrada por empresa, de más reciente a más antigua."
+            fields:
+              - { label: Empresa, name: empresa, widget: string }
+              - { label: Rol, name: rol, widget: string, hint: "Ej: Proyectista / Supervisor de Obra" }
+              - { label: Período, name: periodo, widget: string, hint: "Ej: 2019 – Actualidad" }
+          - label: Formación académica
+            name: formacion
+            widget: list
+            collapsed: false
+            fields:
+              - { label: Título, name: titulo, widget: string }
+              - { label: Institución, name: institucion, widget: string }
+              - { label: Período, name: periodo, widget: string, hint: "Ej: 2009 – 2011" }
+              - { label: Ubicación, name: ubicacion, widget: string, hint: "Ej: Veracruz, México" }
+          - label: Herramientas / Software
+            name: herramientas
+            widget: list
+            hint: "Software que domina. Aparece como chips discretos."
+            field:
+              label: Herramienta
+              name: herramienta
+              widget: string
+
+  - name: contacto
+    label: Información de contacto
+    files:
+      - name: contacto
+        label: Datos de contacto
+        file: data/contacto.json
+        format: json
+        fields:
+          - { label: Nombre completo, name: nombre, widget: string }
+          - { label: Título / Rol, name: titulo, widget: string, hint: "Ej: Arquitecto" }
+          - { label: Teléfono / WhatsApp, name: telefono, widget: string, hint: "Solo números, sin código de país. Ej: 2291274812" }
+          - { label: Correo electrónico, name: correo, widget: string }
+          - { label: Ubicación, name: ubicacion, widget: string, hint: "Ej: Veracruz, México" }
+          - { label: Descripción breve, name: descripcion, widget: text }
+          - label: Redes sociales
+            name: redes
+            widget: list
+            collapsed: false
+            hint: "Activa o desactiva cada red. El orden aquí define el orden en la página."
+            fields:
+              - { label: Nombre, name: nombre, widget: string, hint: "Ej: Instagram" }
+              - { label: URL, name: url, widget: string, hint: "URL completa de tu perfil" }
+              - { label: Visible en el sitio, name: activa, widget: boolean, default: true }
+              - { label: Orden, name: orden, widget: number, value_type: int, default: 1 }

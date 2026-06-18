@@ -1,0 +1,68 @@
+{
+  "nombre": "Alberto Antonio Manzano Fonseca",
+  "titulo": "Arquitecto",
+  "foto": "https://i.ibb.co/1thCYwzg/image.png",
+  "sintesis": "Arquitecto con más de 15 años de experiencia en diseño, supervisión y ejecución de obra. Con base en Veracruz, México, desarrolla proyectos residenciales, comerciales y gastronómicos con especial atención a la integración estructural, la precisión técnica y la identidad del lugar.",
+  "areas": [
+    "Residencial",
+    "Comercial",
+    "Gastronomía",
+    "Corporativo",
+    "Interiorismo"
+  ],
+  "experiencia": [
+    {
+      "empresa": "CAHUE Arquitectura",
+      "rol": "Proyectista / Supervisor de Obra",
+      "periodo": "2019 – Actualidad"
+    },
+    {
+      "empresa": "COEPSA",
+      "rol": "Residente Técnico / Supervisor de Obra",
+      "periodo": "2017 – 2019"
+    },
+    {
+      "empresa": "IDICON",
+      "rol": "Residente de Obra",
+      "periodo": "2014 – 2017"
+    },
+    {
+      "empresa": "Parametric Studio",
+      "rol": "Proyectista / Supervisor de Obra",
+      "periodo": "2012 – 2014"
+    },
+    {
+      "empresa": "NOVASPATIUM",
+      "rol": "Proyectista",
+      "periodo": "2011 – 2012"
+    },
+    {
+      "empresa": "PREDESA",
+      "rol": "Proyectista",
+      "periodo": "2008 – 2011"
+    }
+  ],
+  "formacion": [
+    {
+      "titulo": "Maestría en Diseño Arquitectónico y Bioclimatismo",
+      "institucion": "Universidad Cristóbal Colón",
+      "periodo": "2009 – 2011",
+      "ubicacion": "Veracruz, México"
+    },
+    {
+      "titulo": "Licenciatura en Arquitectura",
+      "institucion": "Universidad Cristóbal Colón",
+      "periodo": "2004 – 2008",
+      "ubicacion": "Veracruz, México"
+    }
+  ],
+  "herramientas": [
+    "AutoCAD",
+    "SketchUp",
+    "Revit",
+    "3D Studio Max",
+    "Lumion",
+    "Enscape",
+    "Photoshop"
+  ]
+}

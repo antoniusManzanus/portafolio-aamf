@@ -1,0 +1,15 @@
+{
+  "nombre": "Alberto Antonio Manzano Fonseca",
+  "titulo": "Arquitecto",
+  "telefono": "2291274812",
+  "correo": "alberto.manzano@gmail.com",
+  "ubicacion": "Veracruz, México",
+  "descripcion": "Estudio de arquitectura con enfoque en proyectos residenciales, comerciales y de hospitalidad en Veracruz, México.",
+  "redes": [
+    { "nombre": "LinkedIn", "url": "https://linkedin.com", "activa": true, "orden": 1 },
+    { "nombre": "Instagram", "url": "https://instagram.com", "activa": true, "orden": 2 },
+    { "nombre": "Facebook", "url": "https://facebook.com", "activa": true, "orden": 3 },
+    { "nombre": "TikTok", "url": "https://tiktok.com", "activa": true, "orden": 4 },
+    { "nombre": "Pinterest", "url": "https://pinterest.com", "activa": true, "orden": 5 }
+  ]
+}

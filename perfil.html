@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AAMF — Perfil</title>
+<link rel="icon" type="image/png" href="https://i.ibb.co/vxPfSrHd/LOGO-MANZANO.png">
+<link rel="apple-touch-icon" href="https://i.ibb.co/vxPfSrHd/LOGO-MANZANO.png">
+<meta name="description" content="Perfil — Alberto Antonio Manzano Fonseca, Arquitecto. Veracruz, México.">
+<meta name="theme-color" content="#f0ede8" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0e0d0b" media="(prefers-color-scheme: dark)">
+<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=DM+Sans:ital,opsz,wght@0,9..40,200;0,9..40,300;0,9..40,400;1,9..40,200&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #f0ede8;
+  --fg: #111;
+  --accent: #b8421a;
+  --muted: #888;
+  --border: #d0ccc5;
+  --card-hover: #e8e4de;
+  --img-placeholder: #d8d4ce;
+  --text-body: #333;
+  --sidebar-chars: #bbb;
+  --filter-active-bg: #b8421a;
+  --filter-active-fg: #fff;
+  --mono: 'DM Mono', monospace;
+  --sans: 'DM Sans', sans-serif;
+  --display: 'Bebas Neue', sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not(.light) {
+    --bg: #0e0d0b; --fg: #f0ede8; --accent: #d4592a;
+    --muted: #6a6660; --border: #2a2825; --card-hover: #181613;
+    --img-placeholder: #1e1c19; --text-body: #c8c4be; --sidebar-chars: #3a3733;
+    --filter-active-bg: #d4592a; --filter-active-fg: #fff;
+  }
+}
+html.dark {
+  --bg: #0e0d0b; --fg: #f0ede8; --accent: #d4592a;
+  --muted: #6a6660; --border: #2a2825; --card-hover: #181613;
+  --img-placeholder: #1e1c19; --text-body: #c8c4be; --sidebar-chars: #3a3733;
+  --filter-active-bg: #d4592a; --filter-active-fg: #fff;
+}
+html.light {
+  --bg: #f0ede8; --fg: #111; --accent: #b8421a;
+  --muted: #888; --border: #d0ccc5; --card-hover: #e8e4de;
+  --img-placeholder: #d8d4ce; --text-body: #333; --sidebar-chars: #bbb;
+  --filter-active-bg: #b8421a; --filter-active-fg: #fff;
+}
+html { transition: background-color 0.3s ease; scroll-behavior: smooth; }
+body, .header, footer { transition: background-color 0.3s ease, border-color 0.3s ease; }
+html.no-transition,
+html.no-transition body,
+html.no-transition .header {
+  transition: none !important;
+}
+body {
+  background: var(--bg); color: var(--fg);
+  font-family: var(--sans); font-size: 13px;
+  line-height: 1.4; min-height: 100vh; overflow-x: hidden;
+}
+
+/* ── HEADER ── */
+.header {
+  display: grid;
+  grid-template-columns: 140px 1fr auto;
+  align-items: center;
+  padding: 0 32px; height: 48px;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  position: sticky; top: 0; z-index: 100;
+}
+.logo { display: flex; align-items: center; cursor: pointer; }
+.logo img { height: 28px; width: auto; display: block; }
+.logo-stack { position: relative; height: 28px; }
+.logo-img-light,
+.logo-img-dark  { height: 28px; width: auto; display: block; transition: opacity 0.25s ease; }
+.logo-img-dark  { position: absolute; top: 0; left: 0; opacity: 0; }
+html.dark .logo-img-light { opacity: 0; }
+html.dark .logo-img-dark  { opacity: 1; }
+.logo-text { font-family: var(--mono); font-size: 18px; font-weight: 500; letter-spacing: -0.02em; }
+.logo-text span { color: var(--accent); }
+.header-nav { display: flex; gap: 24px; justify-content: flex-end; margin-right: 24px; }
+.nav-item {
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--muted);
+  cursor: pointer; transition: color 0.2s; text-decoration: none;
+}
+.nav-item:hover { color: var(--fg); }
+.nav-item.active { color: var(--fg); font-weight: 500; }
+.header-right { display: flex; align-items: center; gap: 16px; }
+.theme-toggle {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--muted);
+  cursor: pointer; user-select: none; white-space: nowrap;
+  background: var(--card-hover); border: 1px solid var(--border);
+  padding: 4px 10px; border-radius: 2px;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.theme-toggle:hover { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+
+/* ── PÁGINA PRINCIPAL ── */
+.perfil-wrap {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 80px 32px 120px;
+}
+
+/* ── BLOQUE 1: IDENTIDAD ── */
+.perfil-hero {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 80px;
+  align-items: start;
+  padding-bottom: 64px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 64px;
+}
+.perfil-title-big {
+  font-family: var(--display);
+  font-size: clamp(64px, 10vw, 150px);
+  line-height: 0.88;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  color: var(--fg);
+  margin-bottom: 40px;
+}
+.perfil-divider {
+  width: 40px; height: 1px;
+  background: var(--accent);
+  margin-bottom: 28px;
+}
+.perfil-name {
+  font-family: var(--mono);
+  font-size: 13px; font-weight: 500;
+  letter-spacing: 0.04em; text-transform: uppercase;
+  color: var(--fg); margin-bottom: 4px;
+}
+.perfil-rol {
+  font-family: var(--mono);
+  font-size: 11px; color: var(--muted);
+  letter-spacing: 0.06em; text-transform: uppercase;
+  margin-bottom: 32px;
+}
+.perfil-sintesis {
+  font-family: var(--sans);
+  font-size: 13.5px; line-height: 1.85;
+  color: var(--text-body); max-width: 420px;
+  text-align: justify; text-justify: inter-word; hyphens: auto;
+}
+.perfil-foto-wrap {
+  position: relative;
+  background: transparent;
+}
+.perfil-foto-stack {
+  position: relative;
+  width: 100%;
+}
+.perfil-foto {
+  width: 100%;
+  display: block;
+  background: transparent;
+  mix-blend-mode: multiply;
+}
+.foto-light {
+  position: relative;
+  opacity: 1;
+  transition: opacity 0.25s ease;
+  filter: grayscale(15%);
+}
+.foto-dark {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  mix-blend-mode: screen;
+  filter: grayscale(15%);
+}
+/* En modo oscuro: ocultar light, mostrar dark */
+html.dark .foto-light { opacity: 0; }
+html.dark .foto-dark  { opacity: 1; }
+/* Hover: quitar grayscale en la activa */
+.perfil-foto-stack:hover .foto-light { filter: grayscale(0%); }
+html.dark .perfil-foto-stack:hover .foto-dark { filter: grayscale(0%); }
+html.dark .perfil-foto-stack:hover .foto-light { filter: grayscale(15%); }
+.perfil-foto-label {
+  font-family: var(--mono); font-size: 9px;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--muted); margin-top: 10px;
+}
+
+/* ── SECCIÓN GENÉRICA ── */
+.perfil-section {
+  margin-bottom: 64px;
+}
+.perfil-section-label {
+  font-family: var(--mono); font-size: 9px;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 28px;
+  display: flex; align-items: center; gap: 12px;
+}
+.perfil-section-label::after {
+  content: '';
+  flex: 1; height: 1px; background: var(--border);
+}
+
+/* ── BLOQUE 2: ÁREAS ── */
+.areas-list {
+  display: flex; flex-wrap: wrap; gap: 8px;
+}
+.area-chip {
+  font-family: var(--mono); font-size: 10px;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  padding: 6px 14px;
+  border: 1px solid var(--border);
+  color: var(--fg);
+  background: transparent;
+  border-radius: 2px;
+  transition: background 0.15s, border-color 0.15s;
+}
+.area-chip:hover { background: var(--card-hover); border-color: var(--fg); }
+
+/* ── BLOQUE 3: TRAYECTORIA ── */
+.timeline {
+  display: flex; flex-direction: column;
+}
+.timeline-item {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 24px;
+  padding: 16px 0;
+  border-top: 1px solid var(--border);
+}
+.timeline-item:last-child { border-bottom: 1px solid var(--border); }
+.timeline-periodo {
+  font-family: var(--mono); font-size: 10px;
+  color: var(--muted); letter-spacing: 0.04em;
+  padding-top: 2px;
+}
+.timeline-empresa {
+  font-family: var(--mono); font-size: 12px;
+  font-weight: 500; color: var(--fg);
+  text-transform: uppercase; letter-spacing: 0.04em;
+  margin-bottom: 3px;
+}
+.timeline-rol {
+  font-family: var(--mono); font-size: 10px;
+  color: var(--muted); letter-spacing: 0.03em;
+}
+
+/* ── BLOQUE 4: FORMACIÓN ── */
+.formacion-list { display: flex; flex-direction: column; }
+.formacion-item {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 24px;
+  padding: 16px 0;
+  border-top: 1px solid var(--border);
+}
+.formacion-item:last-child { border-bottom: 1px solid var(--border); }
+.formacion-periodo {
+  font-family: var(--mono); font-size: 10px;
+  color: var(--muted); letter-spacing: 0.04em;
+  padding-top: 2px;
+}
+.formacion-titulo {
+  font-family: var(--sans); font-size: 13px;
+  color: var(--fg); font-weight: 400;
+  margin-bottom: 4px; line-height: 1.5;
+}
+.formacion-institucion {
+  font-family: var(--mono); font-size: 10px;
+  color: var(--muted); letter-spacing: 0.04em;
+}
+
+/* ── BLOQUE 5: HERRAMIENTAS ── */
+.tools-list {
+  display: flex; flex-wrap: wrap; gap: 6px;
+}
+.tool-chip {
+  font-family: var(--mono); font-size: 10px;
+  letter-spacing: 0.04em;
+  padding: 5px 12px;
+  background: var(--card-hover);
+  color: var(--muted);
+  border-radius: 2px;
+  transition: color 0.15s;
+}
+.tool-chip:hover { color: var(--fg); }
+
+/* ── FOOTER ── */
+footer {
+  padding: 20px 32px;
+  border-top: 1px solid var(--border);
+  display: flex; justify-content: space-between; align-items: center;
+}
+.footer-copy {
+  font-family: var(--mono); font-size: 10px;
+  letter-spacing: 0.04em; color: var(--muted);
+}
+.footer-mobile-nav { display: none; }
+.footer-mobile-link {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--muted);
+  text-decoration: none; transition: color 0.2s;
+}
+.footer-mobile-link:hover { color: var(--fg); }
+
+/* ── WHATSAPP ── */
+.wa-btn {
+  position: fixed; bottom: 28px; right: 60px; z-index: 200;
+  background: #25d366; color: #fff; border-radius: 50px;
+  padding: 10px 20px 10px 14px; display: flex; align-items: center; gap: 8px;
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.04em;
+  cursor: pointer; box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+  transition: transform 0.2s, box-shadow 0.2s; text-decoration: none;
+}
+.wa-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
+
+/* ══ RESPONSIVE ══ */
+@media (max-width: 768px) {
+  .header {
+    grid-template-columns: auto 1fr auto;
+    padding: 0 12px; height: 52px; gap: 8px;
+  }
+  .header-nav { display: none; }
+
+  .perfil-wrap { padding: 40px 16px 80px; }
+
+  .perfil-hero {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+  .perfil-foto-wrap { order: -1; max-width: 240px; margin: 0 auto; text-align: center; }
+  .perfil-title-big { font-size: clamp(56px, 18vw, 100px); }
+
+  .timeline-item,
+  .formacion-item { grid-template-columns: 1fr; gap: 4px; }
+  .timeline-periodo,
+  .formacion-periodo { order: -1; }
+
+  footer { flex-direction: column; gap: 16px; padding: 20px 16px; text-align: center; }
+  .footer-mobile-nav { display: flex; gap: 40px; }
+  .wa-btn { bottom: 16px; right: 16px; }
+}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="logo" onclick="window.location.href='index.html'" style="cursor:pointer;">
+    <div class="logo-stack">
+      <img class="logo-img-light" src="https://i.ibb.co/vxPfSrHd/LOGO-MANZANO.png" alt="AAMF">
+      <img class="logo-img-dark"  src="https://i.ibb.co/hxZ6KHXq/LOGO-MANZANO-invert.png" alt="AAMF">
+    </div>
+    <span class="logo-text" style="display:none;">AA<span style="color:var(--accent)">M</span>F</span>
+  </div>
+  <nav class="header-nav">
+    <a class="nav-item" href="index.html">Proyectos</a>
+    <a class="nav-item" href="contacto.html">Contacto</a>
+    <a class="nav-item active" href="perfil.html">Perfil</a>
+  </nav>
+  <div class="header-right">
+    <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" aria-label="Cambiar modo"></button>
+  </div>
+</header>
+
+<div id="perfilContent"></div>
+
+<footer>
+  <div style="font-family:var(--mono);font-size:13px;letter-spacing:-0.02em;font-weight:500;">AAMF</div>
+  <div class="footer-mobile-nav">
+    <a class="footer-mobile-link" href="index.html">Proyectos</a>
+    <a class="footer-mobile-link" href="contacto.html">Contacto</a>
+  </div>
+  <div class="footer-copy">Alberto Manzano · Arquitecto · Veracruz, México · © 2026</div>
+</footer>
+
+<a class="wa-btn" id="waBtn" href="https://wa.me/522291274812?text=Hola%2C%20me%20interesa%20conocer%20m%C3%A1s%20sobre%20sus%20servicios." target="_blank" rel="noopener">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+    <path d="M12 0C5.373 0 0 5.373 0 12c0 2.124.558 4.121 1.533 5.857L.057 23.882l6.19-1.623A11.945 11.945 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.808 9.808 0 0 1-5.028-1.382l-.36-.214-3.733.979 1.003-3.624-.235-.373A9.77 9.77 0 0 1 2.182 12c0-5.418 4.4-9.818 9.818-9.818 5.418 0 9.818 4.4 9.818 9.818 0 5.418-4.4 9.818-9.818 9.818z"/>
+  </svg>
+  Contacto
+</a>
+
+<script>
+// ── Modo oscuro / claro ──────────────────────────────────────────────
+const safeStorage = {
+  get(key) {
+    try { return localStorage.getItem(key); } catch { return null; }
+  },
+  set(key, val) {
+    try { localStorage.setItem(key, val); } catch { /* silencioso */ }
+  }
+};
+
+const FOTO_DARK = 'https://i.ibb.co/Yvcd4NV/image-blanco-VB-PNG.png';
+
+(function() {
+  const saved = safeStorage.get('theme');
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const isDark = saved === 'dark' || (!saved && prefersDark);
+  document.documentElement.classList.toggle('dark', isDark);
+  document.documentElement.classList.toggle('light', !isDark);
+  const btn = document.getElementById('themeToggle');
+  if (btn) btn.textContent = isDark ? '● oscuro' : '○ claro';
+  document.documentElement.classList.add('no-transition');
+})();
+
+function updateThemeAssets() {
+  // El logo se gestiona por CSS (opacity stack) — sin swap de src necesario
+}
+
+function toggleTheme() {
+  const html = document.documentElement;
+  const wasDark = html.classList.contains('dark'); // estado ANTES del toggle
+  html.classList.toggle('dark',  !wasDark); // nuevo estado: invertir
+  html.classList.toggle('light',  wasDark); // light = opuesto de dark
+  safeStorage.set('theme', wasDark ? 'light' : 'dark');
+  updateToggleLabel();
+  updateThemeAssets();
+}
+function updateToggleLabel() {
+  const btn = document.getElementById('themeToggle');
+  if (!btn) return;
+  btn.textContent = document.documentElement.classList.contains('dark') ? '● oscuro' : '○ claro';
+}
+document.addEventListener('DOMContentLoaded', () => {
+  document.documentElement.classList.remove('no-transition');
+  updateToggleLabel();
+  updateThemeAssets();
+});
+
+// ── Carga de datos ────────────────────────────────────────────────────
+async function loadPerfil() {
+  let data;
+  try {
+    const res = await fetch('data/perfil.json');
+    if (!res.ok) throw new Error('No encontrado');
+    data = await res.json();
+  } catch(e) {
+    document.getElementById('perfilContent').innerHTML =
+      '<p style="padding:80px 32px;font-family:var(--mono);font-size:11px;color:var(--muted)">No se pudo cargar la informaci\u00f3n de perfil.</p>';
+    return;
+  }
+
+  const areasHTML = (data.areas || []).map(a =>
+    `<div class="area-chip">${a}</div>`
+  ).join('');
+
+  const experienciaHTML = (data.experiencia || []).map(e => `
+    <div class="timeline-item">
+      <div class="timeline-periodo">${e.periodo}</div>
+      <div>
+        <div class="timeline-empresa">${e.empresa}</div>
+        <div class="timeline-rol">${e.rol}</div>
+      </div>
+    </div>
+  `).join('');
+
+  const formacionHTML = (data.formacion || []).map(f => `
+    <div class="formacion-item">
+      <div class="formacion-periodo">${f.periodo}</div>
+      <div>
+        <div class="formacion-titulo">${f.titulo}</div>
+        <div class="formacion-institucion">${f.institucion}${f.ubicacion ? ' \u00b7 ' + f.ubicacion : ''}</div>
+      </div>
+    </div>
+  `).join('');
+
+  const herramientasHTML = (data.herramientas || []).map(h =>
+    `<div class="tool-chip">${h}</div>`
+  ).join('');
+
+  document.getElementById('perfilContent').innerHTML = `
+    <div class="perfil-wrap">
+
+      <!-- BLOQUE 1: IDENTIDAD -->
+      <div class="perfil-hero">
+        <div class="perfil-left">
+          <div class="perfil-title-big">PER<br>FIL</div>
+          <div class="perfil-divider"></div>
+          <div class="perfil-name">${data.nombre}</div>
+          <div class="perfil-rol">${data.titulo || 'Arquitecto'}</div>
+          ${data.sintesis ? `<p class="perfil-sintesis">${data.sintesis}</p>` : ''}
+        </div>
+        <div class="perfil-foto-wrap">
+          ${data.foto
+            ? `<div class="perfil-foto-stack">
+                <img class="perfil-foto foto-light" src="${data.foto}" alt="${data.nombre}">
+                <img class="perfil-foto foto-dark"  src="${FOTO_DARK}"  alt="${data.nombre}">
+               </div>`
+            : `<div class="perfil-foto" style="min-height:320px;"></div>`
+          }
+          <div class="perfil-foto-label">Veracruz, M\u00e9xico</div>
+        </div>
+      </div>
+
+      <!-- BLOQUE 2: ÁREAS DE PRÁCTICA -->
+      ${areasHTML ? `
+      <div class="perfil-section">
+        <div class="perfil-section-label">\u2014 \u00c1reas de pr\u00e1ctica</div>
+        <div class="areas-list">${areasHTML}</div>
+      </div>` : ''}
+
+      <!-- BLOQUE 3: TRAYECTORIA -->
+      ${experienciaHTML ? `
+      <div class="perfil-section">
+        <div class="perfil-section-label">\u2014 Trayectoria</div>
+        <div class="timeline">${experienciaHTML}</div>
+      </div>` : ''}
+
+      <!-- BLOQUE 4: FORMACIÓN -->
+      ${formacionHTML ? `
+      <div class="perfil-section">
+        <div class="perfil-section-label">\u2014 Formaci\u00f3n</div>
+        <div class="formacion-list">${formacionHTML}</div>
+      </div>` : ''}
+
+      <!-- BLOQUE 5: HERRAMIENTAS -->
+      ${herramientasHTML ? `
+      <div class="perfil-section">
+        <div class="perfil-section-label">\u2014 Herramientas</div>
+        <div class="tools-list">${herramientasHTML}</div>
+      </div>` : ''}
+
+    </div>
+  `;
+}
+
+loadPerfil();
+</script>
+<script>
+  // Netlify Identity — redirige al panel /admin tras el login
+  if (window.netlifyIdentity) {
+    window.netlifyIdentity.on('init', user => {
+      if (!user) {
+        window.netlifyIdentity.on('login', () => {
+          document.location.href = '/admin/';
+        });
+      }
+    });
+  }
+</script>
+</body>
+</html>

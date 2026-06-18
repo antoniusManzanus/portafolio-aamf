@@ -2,9 +2,10 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AAMF — Proyectos</title>
+<link rel="icon" type="image/png" href="https://i.ibb.co/vxPfSrHd/LOGO-MANZANO.png">
+<link rel="apple-touch-icon" href="https://i.ibb.co/vxPfSrHd/LOGO-MANZANO.png">
 
 <!-- ══ SEO & OPEN GRAPH ══════════════════════════════════════════
      Para cambiar de dominio: reemplaza la variable BASE_URL
@@ -42,6 +43,8 @@
   --img-placeholder: #d8d4ce;
   --text-body: #333;
   --sidebar-chars: #bbb;
+  --filter-active-bg: #b8421a;
+  --filter-active-fg: #fff;
   --mono: 'DM Mono', monospace;
   --sans: 'DM Sans', sans-serif;
   --display: 'Bebas Neue', sans-serif;
@@ -59,6 +62,8 @@
     --img-placeholder: #1e1c19;
     --text-body: #c8c4be;
     --sidebar-chars: #3a3733;
+    --filter-active-bg: #d4592a;
+    --filter-active-fg: #fff;
   }
 }
 
@@ -73,6 +78,8 @@ html.dark {
   --img-placeholder: #1e1c19;
   --text-body: #c8c4be;
   --sidebar-chars: #3a3733;
+  --filter-active-bg: #d4592a;
+  --filter-active-fg: #fff;
 }
 
 /* ══════════ MODO CLARO — forzado por el usuario ══════════ */
@@ -86,12 +93,20 @@ html.light {
   --img-placeholder: #d8d4ce;
   --text-body: #333;
   --sidebar-chars: #bbb;
+  --filter-active-bg: #b8421a;
+  --filter-active-fg: #fff;
 }
 
 /* ══════════ TRANSICIÓN SUAVE AL CAMBIAR MODO ══════════ */
-html { transition: background-color 0.3s ease, color 0.3s ease; }
+html { transition: background-color 0.3s ease; }
 body, .header, .sidebar, .detail-overlay, .d-sidebar, .d-right, .d-title-block, footer {
   transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+html.no-transition,
+html.no-transition body,
+html.no-transition .header,
+html.no-transition .sidebar {
+  transition: none !important;
 }
 html { scroll-behavior: smooth; }
 body {
@@ -104,27 +119,36 @@ body {
   overflow-x: hidden;
 }
 
-/* HEADER STRIP */
+/* HEADER STRIP — Carrusel automático */
 .header-strip {
   height: 180px;
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 2px;
+  position: relative;
+  overflow: hidden;
   background: #000;
+}
+.carousel-track {
+  display: flex;
+  height: 100%;
+  will-change: transform;
+}
+.carousel-slide {
+  flex-shrink: 0;
+  width: 33.333%;
+  position: relative;
   overflow: hidden;
 }
-.hs-cell { position: relative; overflow: hidden; }
-.hs-cell-inner {
+.carousel-slide-inner {
   position: absolute; inset: 0;
   background-size: cover; background-position: center;
-  opacity: 0.8; transition: opacity 0.4s, transform 0.6s;
+  opacity: 0.82;
+  transition: opacity 0.4s;
 }
-.hs-cell:hover .hs-cell-inner { opacity: 1; transform: scale(1.04); }
+.carousel-slide:hover .carousel-slide-inner { opacity: 1; }
 
 /* HEADER BAR */
 .header {
   display: grid;
-  grid-template-columns: 140px 1fr auto;
+  grid-template-columns: 140px 1fr auto auto;
   align-items: center;
   padding: 0 32px;
   height: 48px;
@@ -134,6 +158,12 @@ body {
 }
 .logo { display: flex; align-items: center; cursor: pointer; }
 .logo img { height: 28px; width: auto; display: block; }
+.logo-stack { position: relative; height: 28px; }
+.logo-img-light,
+.logo-img-dark  { height: 28px; width: auto; display: block; transition: opacity 0.25s ease; }
+.logo-img-dark  { position: absolute; top: 0; left: 0; opacity: 0; }
+html.dark .logo-img-light { opacity: 0; }
+html.dark .logo-img-dark  { opacity: 1; }
 .logo-text { font-family: var(--mono); font-size: 18px; font-weight: 500; letter-spacing: -0.02em; }
 .logo-text span { color: var(--accent); }
 .search-bar input {
@@ -155,6 +185,14 @@ body {
   transition: background 0.15s, color 0.15s, border-color 0.15s;
 }
 .theme-toggle:hover { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+.header-nav { display: flex; gap: 24px; justify-content: flex-end; margin-right: 24px; }
+.nav-item {
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--muted);
+  cursor: pointer; transition: color 0.2s; text-decoration: none;
+}
+.nav-item:hover { color: var(--fg); }
+.nav-item--disabled { opacity: 0.4; cursor: default; pointer-events: none; }
 
 /* MAIN LAYOUT */
 .main { display: grid; grid-template-columns: 140px 1fr 80px; min-height: calc(100vh - 230px); }
@@ -170,7 +208,14 @@ body {
   color: var(--muted); cursor: pointer; padding: 3px 0; transition: color 0.15s; text-transform: uppercase;
 }
 .nav-link.active, .nav-link:hover { color: var(--fg); }
-.nav-link.filter-active { color: var(--accent); font-weight: 500; }
+.nav-link.filter-active { 
+  color: var(--filter-active-fg); 
+  background: var(--filter-active-bg);
+  font-weight: 500; 
+  border-radius: 2px;
+  padding: 3px 8px;
+  margin: 0 -8px;
+}
 .nav-link.filter-active::before { content: "▸ "; }
 .nav-link.active { font-weight: 500; }
 .sidebar-section { margin-top: 32px; }
@@ -187,7 +232,37 @@ body {
   cursor: pointer; transition: all 0.15s;
 }
 .filter-btn:hover, .filter-btn.active { background: var(--fg); color: var(--bg); border-color: var(--fg); }
-.projects-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; }
+.projects-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; transition: grid-template-columns 0.3s; }
+
+/* Vista lista */
+.projects-grid.view-list {
+  grid-template-columns: 1fr;
+}
+.projects-grid.view-list .project-card {
+  display: grid;
+  grid-template-columns: 180px 1fr 24px;
+  align-items: center;
+  gap: 20px;
+  padding: 12px 16px;
+  min-height: 80px;
+}
+.projects-grid.view-list .project-img-wrap {
+  width: 180px;
+  min-width: 180px;
+  aspect-ratio: 16/10;
+  margin-bottom: 0;
+}
+.projects-grid.view-list .project-name {
+  font-size: 11px;
+}
+.projects-grid.view-list .project-card::after {
+  content: '→';
+  position: static;
+  opacity: 1;
+  transform: none;
+  font-size: 12px;
+  color: var(--muted);
+}
 .project-card {
   cursor: pointer; padding: 16px 12px; transition: background 0.2s;
   border-bottom: 1px solid var(--border); position: relative; overflow: hidden;
@@ -214,9 +289,8 @@ body {
 .project-card:hover::after { opacity: 1; transform: translateX(0); }
 @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
 .project-card { animation: fadeUp 0.5s both; }
-.project-card:nth-child(1){animation-delay:.05s}.project-card:nth-child(2){animation-delay:.1s}
-.project-card:nth-child(3){animation-delay:.15s}.project-card:nth-child(4){animation-delay:.2s}
-.project-card:nth-child(5){animation-delay:.25s}.project-card:nth-child(6){animation-delay:.3s}
+.project-card[data-hidden="true"] { animation: none; }
+/* animation-delay aplicado vía JS en applyAnimationDelays() */
 
 /* RIGHT INDEX */
 .index-panel {
@@ -227,12 +301,26 @@ body {
 .index-item { font-family: var(--mono); font-size: 10px; letter-spacing: 0.04em; color: var(--muted); padding: 2px 0; cursor: pointer; transition: color 0.15s; }
 .index-item:hover { color: var(--fg); }
 .index-item.bold { font-weight: 500; color: var(--fg); margin-top: 12px; margin-bottom: 4px; }
+.index-item.active { color: var(--accent); font-weight: 500; }
+.index-item.filter-active {
+  color: var(--filter-active-fg);
+  background: var(--filter-active-bg);
+  font-weight: 500;
+  border-radius: 2px;
+  padding: 2px 8px;
+  margin: 0 -8px;
+}
 
 /* FOOTER */
 footer { padding: 20px 32px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
-.footer-nav { display: flex; gap: 32px; }
-.footer-link { font-family: var(--mono); font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); cursor: pointer; transition: color 0.15s; }
-.footer-link:hover { color: var(--fg); }
+.footer-copy { font-family: var(--mono); font-size: 10px; letter-spacing: 0.04em; color: var(--muted); }
+.footer-mobile-nav { display: none; }
+.footer-mobile-link {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--muted);
+  text-decoration: none; transition: color 0.2s;
+}
+.footer-mobile-link:hover { color: var(--fg); }
 
 /* DETAIL OVERLAY */
 .detail-overlay {
@@ -304,7 +392,7 @@ footer { padding: 20px 32px; border-top: 1px solid var(--border); display: flex;
 .d-meta-label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
 .d-meta-val { font-family: var(--mono); font-size: 12px; color: var(--fg); }
 .d-content { max-width: 640px; margin: 0 auto; padding: 48px 24px; }
-.d-content p { font-family: var(--sans); font-size: 13.5px; line-height: 1.8; color: var(--text-body); margin-bottom: 28px; }
+.d-content p { font-family: var(--sans); font-size: 13.5px; line-height: 1.8; color: var(--text-body); margin-bottom: 28px; text-align: justify; text-justify: inter-word; hyphens: auto; }
 .d-content img { width: 100%; display: block; margin: 40px 0; }
 .d-img2 { max-width: 640px; margin: 0 auto; padding: 0 24px 60px; }
 .d-img2 img { width: 100%; display: block; }
@@ -316,7 +404,7 @@ footer { padding: 20px 32px; border-top: 1px solid var(--border); display: flex;
 .d-content { animation: fadeIn 0.5s ease 0.28s both; }
 .d-img2 { animation: fadeIn 0.5s ease 0.35s both; }
 .d-gallery-img { width:100%; display:block; margin-bottom:3px; }
-.d-gallery-text { font-family: var(--sans); font-size: 13.5px; line-height: 1.8; color: var(--text-body); padding: 36px 0 28px; }
+.d-gallery-text { font-family: var(--sans); font-size: 13.5px; line-height: 1.8; color: var(--text-body); padding: 36px 0 28px; text-align: justify; text-justify: inter-word; hyphens: auto; }
 .d-gallery-grid2 { display:grid; grid-template-columns:1fr 1fr; gap:3px; margin-bottom:3px; }
 .d-gallery-grid2 img { width:100%; display:block; object-fit:cover; aspect-ratio:4/3; }
 .d-gallery-section-label {
@@ -336,6 +424,9 @@ footer { padding: 20px 32px; border-top: 1px solid var(--border); display: flex;
 }
 .wa-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
 
+/* Mobile type chips — ocultos en desktop */
+.mobile-type-chip { display: none; }
+
 /* ══════════ RESPONSIVE — TABLET (≤1024px) ══════════ */
 @media (max-width: 1024px) {
   .main { grid-template-columns: 110px 1fr 60px; }
@@ -353,13 +444,16 @@ footer { padding: 20px 32px; border-top: 1px solid var(--border); display: flex;
 
   /* Header bar — simplificado */
   .header {
-    grid-template-columns: auto 1fr;
-    padding: 0 16px;
+    grid-template-columns: auto 1fr auto;
+    padding: 0 12px;
     height: 52px;
-    gap: 12px;
+    gap: 8px;
   }
-  .header-right { display: none; }
+  .header-nav { display: none; }
+  .header-index { display: none; }
+  .header-right { gap: 8px; }
   .search-bar input { width: 100%; font-size: 13px; }
+  .theme-toggle { font-size: 9px; padding: 3px 7px; }
 
   /* Layout principal — una sola columna */
   .main { grid-template-columns: 1fr; }
@@ -382,6 +476,20 @@ footer { padding: 20px 32px; border-top: 1px solid var(--border); display: flex;
     margin-bottom: 16px;
   }
 
+  /* Ocultar botones de vista Red/Lista en móvil */
+  .filter-btn { display: none; }
+
+  /* Chips de tipo — visibles solo en móvil */
+  .mobile-type-chip {
+    display: inline-flex;
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.06em;
+    text-transform: uppercase; padding: 4px 10px;
+    border: 1px solid var(--border); background: transparent; color: var(--muted);
+    cursor: pointer; transition: all 0.15s; border-radius: 2px;
+  }
+  .mobile-type-chip:hover { background: var(--card-hover); color: var(--fg); }
+  .mobile-type-chip.chip-active { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+
   /* Botón para abrir/cerrar sidebar en móvil */
   .mobile-filter-toggle {
     font-family: var(--mono); font-size: 10px; letter-spacing: 0.06em;
@@ -401,11 +509,11 @@ footer { padding: 20px 32px; border-top: 1px solid var(--border); display: flex;
   /* Footer */
   footer {
     flex-direction: column;
-    gap: 12px;
-    padding: 16px;
+    gap: 16px;
+    padding: 20px 16px;
     text-align: center;
   }
-  .footer-nav { gap: 20px; }
+  .footer-mobile-nav { display: flex; gap: 40px; }
 
   /* WhatsApp — ajustado para no tapar contenido */
   .wa-btn {
@@ -464,22 +572,26 @@ footer { padding: 20px 32px; border-top: 1px solid var(--border); display: flex;
 </head>
 <body>
 
-<!-- HEADER STRIP -->
+<!-- HEADER STRIP — Carrusel -->
 <div class="header-strip" id="headerStrip">
-  <div class="hs-cell"><div class="hs-cell-inner" id="hs1"></div></div>
-  <div class="hs-cell"><div class="hs-cell-inner" id="hs2"></div></div>
-  <div class="hs-cell"><div class="hs-cell-inner" id="hs3"></div></div>
+  <div class="carousel-track" id="carouselTrack"></div>
 </div>
 
 <header class="header">
-  <div class="logo">
-    <img src="https://i.ibb.co/vxPfSrHd/LOGO-MANZANO.png" alt="AAMF"
-         onerror="this.style.display='none';this.nextElementSibling.style.display='block';">
+  <div class="logo" onclick="window.location.href='index.html'">
+    <div class="logo-stack">
+      <img class="logo-img-light" src="https://i.ibb.co/vxPfSrHd/LOGO-MANZANO.png" alt="AAMF">
+      <img class="logo-img-dark"  src="https://i.ibb.co/hxZ6KHXq/LOGO-MANZANO-invert.png" alt="AAMF">
+    </div>
     <span class="logo-text" style="display:none;">AA<span>M</span>F</span>
   </div>
   <div class="search-bar"><input type="text" placeholder="Buscar..." id="searchInput" oninput="filterProjects(this.value)"></div>
+  <nav class="header-nav">
+    <a class="nav-item" href="contacto.html">Contacto</a>
+    <a class="nav-item" href="perfil.html">Perfil</a>
+  </nav>
   <div class="header-right">
-    <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" aria-label="Cambiar modo">● oscuro</button>
+    <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" aria-label="Cambiar modo"></button>
     <span class="header-index">índice</span>
   </div>
 </header>
@@ -490,23 +602,27 @@ footer { padding: 20px 32px; border-top: 1px solid var(--border); display: flex;
     <div class="sidebar-section">
       <div class="sidebar-label">Año</div>
       <div id="yearFilters"></div>
-      <div class="nav-link" onclick="filterYear(\'\')">Todos</div>
+      <div class="nav-link" data-filter-year="">Todos</div>
     </div>
     <div class="sidebar-section">
       <div class="sidebar-label">Tipo</div>
-      <div class="nav-link" data-type="residencial" onclick="filterType(\'residencial\')">Residencial</div>
-      <div class="nav-link" data-type="comercial" onclick="filterType(\'comercial\')">Comercial</div>
-      <div class="nav-link" data-type="gastronomia" onclick="filterType(\'gastronomia\')">Gastronomía</div>
-      <div class="nav-link" onclick="filterType(\'\')">Todos</div>
-      <div class="nav-link" style="color:var(--accent);margin-top:12px;" onclick="clearFilters()">Limpiar</div>
+      <div class="nav-link" data-filter-type="residencial">Residencial</div>
+      <div class="nav-link" data-filter-type="comercial">Comercial</div>
+      <div class="nav-link" data-filter-type="gastronomia">Gastronomía</div>
+      <div class="nav-link" data-filter-type="">Todos</div>
+      <div class="nav-link" data-filter-clear style="color:var(--accent);margin-top:12px;">Limpiar</div>
     </div>
   </aside>
 
   <main class="projects">
     <div class="filter-bar">
       <button class="mobile-filter-toggle" id="filterToggle" onclick="toggleSidebar()">Filtros</button>
-      <button class="filter-btn active" onclick="setView(\'grid\',this)">Red</button>
-      <button class="filter-btn" onclick="setView(\'list\',this)">Lista</button>
+      <button class="filter-btn active" data-view="grid">Red</button>
+      <button class="filter-btn" data-view="list">Lista</button>
+      <button class="mobile-type-chip chip-active" data-mobile-type="">Todos</button>
+      <button class="mobile-type-chip" data-mobile-type="residencial">Residencial</button>
+      <button class="mobile-type-chip" data-mobile-type="comercial">Comercial</button>
+      <button class="mobile-type-chip" data-mobile-type="gastronomia">Gastronomía</button>
     </div>
     <div class="project-counter" id="projectCounter"></div>
     <div class="projects-grid" id="projectsGrid">
@@ -522,22 +638,22 @@ footer { padding: 20px 32px; border-top: 1px solid var(--border); display: flex;
     <div class="index-item bold">Año</div>
     <div id="yearIndex"></div>
     <div class="index-item bold">Vista</div>
-    <div class="index-item" onclick="setView(\'grid\',this)">Red</div>
-    <div class="index-item" onclick="setView(\'list\',this)">Lista</div>
+    <div class="index-item" data-view="grid">Red</div>
+    <div class="index-item" data-view="list">Lista</div>
   </aside>
 </div>
 
 <footer>
   <div style="font-family:var(--mono);font-size:13px;letter-spacing:-0.02em;font-weight:500;">AAMF</div>
-  <div class="footer-nav">
-    <div class="footer-link">Estudio</div>
-    <div class="footer-link">Contacto</div>
-    <div class="footer-link">© 2026</div>
+  <div class="footer-mobile-nav">
+    <a class="footer-mobile-link" href="perfil.html">Perfil</a>
+    <a class="footer-mobile-link" href="contacto.html">Contacto</a>
   </div>
+  <div class="footer-copy">Alberto Manzano · Arquitecto · Veracruz, México · © 2026</div>
 </footer>
 
 <!-- WhatsApp flotante -->
-<a class="wa-btn" href="https://wa.me/522291274812?text=Hola%2C%20me%20interesa%20conocer%20m%C3%A1s%20sobre%20sus%20servicios." target="_blank" rel="noopener">
+<a class="wa-btn" id="waBtn" href="https://wa.me/522291274812?text=Hola%2C%20me%20interesa%20conocer%20m%C3%A1s%20sobre%20sus%20servicios." target="_blank" rel="noopener">
   <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
     <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
     <path d="M12 0C5.373 0 0 5.373 0 12c0 2.124.558 4.121 1.533 5.857L.057 23.882l6.19-1.623A11.945 11.945 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.808 9.808 0 0 1-5.028-1.382l-.36-.214-3.733.979 1.003-3.624-.235-.373A9.77 9.77 0 0 1 2.182 12c0-5.418 4.4-9.818 9.818-9.818 5.418 0 9.818 4.4 9.818 9.818 0 5.418-4.4 9.818-9.818 9.818z"/>
@@ -564,13 +680,14 @@ footer { padding: 20px 32px; border-top: 1px solid var(--border); display: flex;
       <div class="d-meta-item"><span class="d-meta-label">Programa</span><span class="d-meta-val" id="dType">—</span></div>
       <div class="d-meta-item"><span class="d-meta-label">Superficie</span><span class="d-meta-val" id="dArea">—</span></div>
       <div class="d-meta-item"><span class="d-meta-label">Estado</span><span class="d-meta-val" id="dStatus">—</span></div>
+      <div class="d-meta-item" id="dColabWrap" style="display:none;"><span class="d-meta-label">Rol</span><span class="d-meta-val" id="dColab">—</span></div>
     </div>
     <div class="d-content" id="dContentStd">
       <img id="dImg2" src="" alt="" style="margin-bottom:24px;">
       <p id="dP1"></p>
       <p id="dP2"></p>
     </div>
-    <div class="d-img2"><img id="dImg3" src="" alt=""></div>
+    <div class="d-img2" id="dImg3Wrap"><img id="dImg3" src="" alt=""></div>
     <div class="d-img2" id="dImg4Wrap" style="display:none;"><img id="dImg4" src="" alt=""></div>
     <div class="d-img2" id="dImg5Wrap" style="display:none;"><img id="dImg5" src="" alt=""></div>
     <div id="dGallery" style="display:none; max-width:900px; margin:0 auto; padding:0 24px 80px;"></div>
@@ -579,31 +696,62 @@ footer { padding: 20px 32px; border-top: 1px solid var(--border); display: flex;
 
 <script>
 // ── Modo oscuro / claro ──────────────────────────────────────────────
+const safeStorage = {
+  get(key) {
+    try { return localStorage.getItem(key); } catch { return null; }
+  },
+  set(key, val) {
+    try { localStorage.setItem(key, val); } catch { /* silencioso */ }
+  }
+};
+
 (function() {
-  const saved = localStorage.getItem('theme');
+  const saved = safeStorage.get('theme');
   const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
   const isDark = saved === 'dark' || (!saved && prefersDark);
   document.documentElement.classList.toggle('dark', isDark);
   document.documentElement.classList.toggle('light', !isDark);
+  const btn = document.getElementById('themeToggle');
+  if (btn) btn.textContent = isDark ? '● oscuro' : '○ claro';
+  document.documentElement.classList.add('no-transition');
 })();
+
+function updateThemeAssets() {
+  // El logo se gestiona por CSS (opacity stack) — sin swap de src necesario
+}
 
 function toggleTheme() {
   const html = document.documentElement;
-  const isDark = html.classList.contains('dark');
-  html.classList.toggle('dark', !isDark);
-  html.classList.toggle('light', isDark);
-  localStorage.setItem('theme', isDark ? 'light' : 'dark');
+  const wasDark = html.classList.contains('dark'); // estado ANTES del toggle
+  html.classList.toggle('dark',  !wasDark); // nuevo estado: invertir
+  html.classList.toggle('light',  wasDark); // light = opuesto de dark
+  safeStorage.set('theme', wasDark ? 'light' : 'dark');
   updateToggleLabel();
+  updateThemeAssets();
 }
 function updateToggleLabel() {
   const btn = document.getElementById('themeToggle');
   if (!btn) return;
   btn.textContent = document.documentElement.classList.contains('dark') ? '● oscuro' : '○ claro';
 }
-document.addEventListener('DOMContentLoaded', updateToggleLabel);
-
 let proyectos = [];
 let currentYear = '', currentType = '';
+
+// ── Utilidad: escapar HTML para evitar XSS (BUG-2-6) ────────────────
+function escapeHtml(str) {
+  return String(str ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+// ── Utilidad: obtiene el valor del campo de búsqueda de forma segura (BUG-3-9) ──
+function getSearchQuery() {
+  const input = document.getElementById('searchInput');
+  return input ? input.value : '';
+}
 
 // ── Carga de datos — lee índice dinámicamente ────────────────────────
 async function loadProyectos() {
@@ -611,6 +759,7 @@ async function loadProyectos() {
   let slugs = [];
   try {
     const idxRes = await fetch('data/proyectos/index.json');
+    if (!idxRes.ok) throw new Error(`HTTP ${idxRes.status}`); // BUG-2-1
     const idx = await idxRes.json();
     slugs = idx.slugs || [];
   } catch(e) {
@@ -622,12 +771,17 @@ async function loadProyectos() {
   const results = await Promise.all(
     slugs.map(slug =>
       fetch(`data/proyectos/${slug}.json`)
-        .then(r => r.json())
+        .then(r => {
+          if (!r.ok) throw new Error(`HTTP ${r.status}`); // BUG-2-1
+          return r.json();
+        })
         .then(data => ({ ...data, slug }))
         .catch(() => null)
     )
   );
   proyectos = results.filter(Boolean);
+  // Ordenar por año descendente — Number() para robustecer con valores string (BUG-2-8)
+  proyectos.sort((a, b) => (Number(b.year) || 0) - (Number(a.year) || 0));
   renderGrid();
   renderSidebarYears();
   renderHeaderStrip();
@@ -636,31 +790,101 @@ async function loadProyectos() {
 // ── Render cuadrícula ────────────────────────────────────────────────
 function renderGrid() {
   const grid = document.getElementById('projectsGrid');
+  if (!grid) return; // BUG-2-7
+
   grid.innerHTML = proyectos.map((p, i) => `
     <div class="project-card"
-      data-year="${p.year}"
-      data-type="${p.tipo}"
-      data-slug="${p.slug}"
-      style="animation-delay:${(i+1)*0.05}s"
-      onclick="openDetail('${p.slug}')">
+      data-year="${escapeHtml(p.year)}"
+      data-type="${escapeHtml(p.tipo)}"
+      data-slug="${escapeHtml(p.slug)}"
+      data-delay="${(i+1)*0.05}">
       <div class="project-img-wrap">
-        <img class="project-img" src="${p.portada}" loading="lazy" alt="${p.nombre}">
+        <img class="project-img" src="${escapeHtml(p.portada)}" loading="lazy" alt="${escapeHtml(p.nombre)}">
       </div>
-      <div class="project-name">${p.nombre}<span class="project-year">, ${p.year}</span></div>
+      <div class="project-name">${escapeHtml(p.nombre)}<span class="project-year">, ${Number(p.year) || ''}</span></div>
     </div>
   `).join('');
+
+  // BUG-2-6: delegación de eventos en lugar de onclick inline
+  grid.addEventListener('click', e => {
+    const card = e.target.closest('.project-card');
+    if (card) openDetail(card.dataset.slug);
+  });
+
+  // Apply animation-delay only in grid view via JS (not inline style)
+  applyAnimationDelays();
   updateCounter(proyectos.length, proyectos.length);
 }
 
-// ── Header strip con las 3 primeras portadas ─────────────────────────
+// ── Header strip — Carrusel automático ───────────────────────────────
+let carouselInterval = null;
+let carouselPos = 0;
+
 function renderHeaderStrip() {
-  ['hs1','hs2','hs3'].forEach((id, i) => {
-    const el = document.getElementById(id);
-    if (el && proyectos[i]) {
-      el.style.backgroundImage = `url('${proyectos[i].portada}')`;
-    }
+  const track = document.getElementById('carouselTrack');
+  if (!track || proyectos.length === 0) return;
+
+  const imgs = proyectos.map(p => p.portada).filter(Boolean);
+  if (imgs.length === 0) return;
+
+  // Duplica para loop infinito suave
+  const allImgs = [...imgs, ...imgs];
+  const totalSlides = allImgs.length;
+  const visibleSlides = Math.min(3, imgs.length);
+  const slideWidthPct = 100 / visibleSlides;
+
+  track.innerHTML = allImgs.map(url => `
+    <div class="carousel-slide">
+      <div class="carousel-slide-inner" style="background-image:url('${url}')"></div>
+    </div>
+  `).join('');
+
+  track.style.width = `${totalSlides * slideWidthPct}%`;
+  track.querySelectorAll('.carousel-slide').forEach(s => {
+    s.style.width = `${100 / totalSlides}%`;
   });
+
+  startCarousel(imgs.length, totalSlides);
 }
+
+function startCarousel(originalCount, totalSlides) {
+  if (carouselInterval) clearInterval(carouselInterval);
+  carouselPos = 0;
+  const track = document.getElementById('carouselTrack');
+  if (!track) return;
+
+  function tick() {
+    carouselPos++;
+    const slideWidthPercent = 100 / totalSlides;
+    const offset = carouselPos * slideWidthPercent;
+    track.style.transition = 'transform 0.9s cubic-bezier(0.4,0,0.2,1)';
+    track.style.transform = `translateX(-${offset}%)`;
+
+    if (carouselPos >= originalCount) {
+      // BUG-2-4: 1050ms = 900ms transición + 150ms buffer para evitar flash visible
+      setTimeout(() => {
+        track.style.transition = 'none';
+        track.style.transform = 'translateX(0)';
+        carouselPos = 0;
+      }, 1050);
+    }
+  }
+
+  // Guardar tick en variable de módulo para que el listener de visibilitychange
+  // pueda reiniciar el intervalo con la misma función (BUG-2-3)
+  carouselInterval = setInterval(tick, 3500);
+  startCarousel._tick = tick;
+}
+
+// BUG-2-3: listener registrado UNA SOLA VEZ fuera de startCarousel,
+// referencia a la función tick actual via startCarousel._tick
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) {
+    clearInterval(carouselInterval);
+  } else if (startCarousel._tick) {
+    carouselInterval = setInterval(startCarousel._tick, 3500);
+  }
+});
 
 // ── Sidebar: años únicos ─────────────────────────────────────────────
 function renderSidebarYears() {
@@ -668,10 +892,10 @@ function renderSidebarYears() {
   const yearFilters = document.getElementById('yearFilters');
   const yearIndex = document.getElementById('yearIndex');
   if (yearFilters) yearFilters.innerHTML = years.map(y =>
-    `<div class="nav-link" data-year="${y}" onclick="filterYear(${y})">${y}</div>`
+    `<div class="nav-link" data-filter-year="${y}">${y}</div>`
   ).join('');
   if (yearIndex) yearIndex.innerHTML = years.map(y =>
-    `<div class="index-item" onclick="filterYear(${y})">${y}</div>`
+    `<div class="index-item" data-filter-year="${y}">${y}</div>`
   ).join('');
 }
 
@@ -680,20 +904,37 @@ function filterProjects(q) {
   const cards = document.querySelectorAll('.project-card');
   let visible = 0;
   cards.forEach(c => {
-    const nm = c.querySelector('.project-name').textContent.toLowerCase();
+    // BUG-3-6: null-check en .project-name antes de acceder a textContent
+    const nameEl = c.querySelector('.project-name');
+    const nm = nameEl ? nameEl.textContent.toLowerCase() : '';
     const ms = !q || nm.includes(q.toLowerCase());
-    const my = !currentYear || c.dataset.year === String(currentYear);
+    // BUG-3-1: currentYear es siempre string; dataset.year también → comparación directa segura
+    const my = !currentYear || c.dataset.year === currentYear;
     const mt = !currentType || c.dataset.type === currentType;
     const show = ms && my && mt;
+    // BUG-3-2: marcar con data-hidden para que setView() detecte tarjetas ocultas
+    // de forma confiable sin depender de la serialización de style inline
+    c.dataset.hidden = show ? '' : 'true';
     c.style.display = show ? '' : 'none';
     if (show) visible++;
   });
   updateCounter(visible, cards.length);
-  document.querySelectorAll('.sidebar .nav-link[data-year]').forEach(el => {
-    el.classList.toggle('filter-active', String(el.dataset.year) === String(currentYear) && currentYear !== '');
+  // Aplicar animation-delays consistentes tras filtrar
+  applyAnimationDelays();
+  // Actualizar clases active en sidebar (año)
+  document.querySelectorAll('.sidebar [data-filter-year]').forEach(el => {
+    const isActive = el.dataset.filterYear === currentYear && currentYear !== '';
+    el.classList.toggle('filter-active', isActive);
   });
-  document.querySelectorAll('.sidebar .nav-link[data-type]').forEach(el => {
-    el.classList.toggle('filter-active', el.dataset.type === currentType && currentType !== '');
+  // Actualizar clases active en sidebar (tipo)
+  document.querySelectorAll('.sidebar [data-filter-type]').forEach(el => {
+    const isActive = el.dataset.filterType === currentType && currentType !== '';
+    el.classList.toggle('filter-active', isActive);
+  });
+  // Actualizar clases active en panel derecho (año)
+  document.querySelectorAll('.index-panel [data-filter-year]').forEach(el => {
+    const isActive = el.dataset.filterYear === currentYear && currentYear !== '';
+    el.classList.toggle('filter-active', isActive);
   });
 }
 function updateCounter(visible, total) {
@@ -702,39 +943,96 @@ function updateCounter(visible, total) {
     ? `Mostrando <span>${visible}</span> de <span>${total}</span> proyectos` : '';
 }
 function filterYear(y) {
-  currentYear = currentYear == y ? '' : y;
-  filterProjects(document.getElementById('searchInput').value);
+  // BUG-3-1: y llega como string desde dataset.filterYear directamente (sin Number())
+  // Toggle: si ya es el año activo, limpiar; si no, activar
+  currentYear = currentYear === y ? '' : y;
+  // BUG-3-9: usar getSearchQuery() con null-check
+  filterProjects(getSearchQuery());
+}
+// BUG-3-3: centralizar sincronización de chips móviles para que
+// tanto filterType() como el handler de chips usen la misma lógica
+function syncMobileChips() {
+  document.querySelectorAll('.mobile-type-chip').forEach(c => c.classList.remove('chip-active'));
+  const activeChip = document.querySelector(`.mobile-type-chip[data-mobile-type="${currentType}"]`);
+  if (activeChip) activeChip.classList.add('chip-active');
 }
 function filterType(t) {
   currentType = currentType === t ? '' : t;
-  filterProjects(document.getElementById('searchInput').value);
+  // BUG-3-9: usar getSearchQuery() con null-check
+  filterProjects(getSearchQuery());
+  syncMobileChips();
 }
 function clearFilters() {
   currentYear = ''; currentType = '';
-  document.getElementById('searchInput').value = '';
+  const input = document.getElementById('searchInput');
+  if (input) input.value = '';
+  // filterProjects('') limpia todos los filter-active en sidebar e índice
+  // mediante classList.toggle('filter-active', false) internamente
   filterProjects('');
+  // BUG-3-4: el querySelectorAll('.filter-active') posterior era redundante;
+  // filterProjects('') ya los removió. Solo sincronizar chips (usan chip-active, no filter-active)
+  syncMobileChips(); // currentType es '' → activa el chip "Todos"
 }
 
 // ── Vista grid / lista ───────────────────────────────────────────────
+let currentView = 'grid';
+
+function applyAnimationDelays() {
+  // BUG-3-7: solo aplica delays a tarjetas visibles para no contaminar
+  // el estado de animación de tarjetas actualmente ocultas por filtro
+  document.querySelectorAll('.project-card:not([data-hidden="true"])').forEach(c => {
+    const delay = c.dataset.delay || 0;
+    c.style.animationDelay = `${delay}s`;
+  });
+}
+
 function setView(view, btn) {
+  currentView = view;
+
+  // Actualizar botones filter-bar
   document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-  if (btn) btn.classList.add('active');
-  const grid = document.getElementById('projectsGrid');
-  if (view === 'list') {
-    grid.style.gridTemplateColumns = '1fr';
-    document.querySelectorAll('.project-card').forEach(c => { c.style.display='flex'; c.style.alignItems='center'; c.style.gap='20px'; c.style.padding='12px'; });
-    document.querySelectorAll('.project-img-wrap').forEach(w => { w.style.width='120px'; w.style.minWidth='120px'; w.style.aspectRatio='16/10'; w.style.marginBottom='0'; });
+  if (btn && btn.classList && btn.classList.contains('filter-btn')) {
+    btn.classList.add('active');
   } else {
-    grid.style.gridTemplateColumns = 'repeat(3, 1fr)';
-    document.querySelectorAll('.project-card').forEach(c => { c.style.display=''; c.style.alignItems=''; c.style.gap=''; c.style.padding=''; });
-    document.querySelectorAll('.project-img-wrap').forEach(w => { w.style.width=''; w.style.minWidth=''; w.style.aspectRatio=''; w.style.marginBottom=''; });
+    // BUG-3-8: usar dataset.view en lugar de textContent — robusto frente a
+    // cambios de copy o whitespace en el HTML
+    document.querySelectorAll('.filter-btn[data-view]').forEach(b => {
+      if (b.dataset.view === view) b.classList.add('active');
+    });
+  }
+
+  // Actualizar panel derecho (índice)
+  document.querySelectorAll('.index-item[data-view]').forEach(b => b.classList.remove('active'));
+  const idxBtn = document.querySelector(`.index-item[data-view="${view}"]`);
+  if (idxBtn) idxBtn.classList.add('active');
+
+  const grid = document.getElementById('projectsGrid');
+  if (!grid) return;
+
+  if (view === 'list') {
+    grid.classList.add('view-list');
+    // BUG-3-2: usar [data-hidden="true"] en lugar de [style*="display: none"]
+    // para detectar tarjetas ocultas de forma confiable entre navegadores
+    document.querySelectorAll('.project-card:not([data-hidden="true"])').forEach(c => {
+      c.style.animationDelay = '0s';
+      c.style.animation = 'none';
+    });
+  } else {
+    grid.classList.remove('view-list');
+    document.querySelectorAll('.project-card:not([data-hidden="true"])').forEach(c => {
+      c.style.animation = '';
+      c.style.animationDelay = '';
+    });
+    applyAnimationDelays();
   }
 }
 
 // ── Sidebar móvil ────────────────────────────────────────────────────
 function toggleSidebar() {
+  // BUG-3-5: null-checks en sidebar y btn antes de acceder a classList/textContent
   const sidebar = document.querySelector('.sidebar');
   const btn = document.getElementById('filterToggle');
+  if (!sidebar || !btn) return;
   sidebar.classList.toggle('open');
   btn.classList.toggle('active');
   btn.textContent = sidebar.classList.contains('open') ? 'Cerrar' : 'Filtros';
@@ -742,6 +1040,10 @@ function toggleSidebar() {
 
 // ── Galería ──────────────────────────────────────────────────────────
 function buildGallery(el, imgs, p1, p2) {
+  // BUG-4-2: evitar que null/undefined aparezcan como cadena literal en el HTML
+  // BUG-4-3: escapar entidades para uso seguro en innerHTML (reutiliza escapeHtml de BUG-2-6)
+  p1 = escapeHtml(p1 || '');
+  p2 = escapeHtml(p2 || '');
   const n = imgs.length;
   let html = '';
   if (n >= 10) {
@@ -783,7 +1085,12 @@ function buildGallery(el, imgs, p1, p2) {
 }
 
 // ── Overlay detalle ──────────────────────────────────────────────────
+let _closeTimer = null; // BUG-4-5: guardar referencia del timer de closeDetail
+
 function openDetail(slug) {
+  // BUG-4-5: cancelar timer pendiente de closeDetail() para evitar que
+  // restaure overflow:'' mientras el overlay ya está abierto de nuevo
+  if (_closeTimer) { clearTimeout(_closeTimer); _closeTimer = null; }
   const p = proyectos.find(x => x.slug === slug);
   if (!p) return;
   const ov = document.getElementById('detailOverlay');
@@ -798,6 +1105,21 @@ function openDetail(slug) {
   document.getElementById('dType').textContent = p.programa;
   document.getElementById('dArea').textContent = p.area;
   document.getElementById('dStatus').textContent = p.estado;
+
+  const colabWrap = document.getElementById('dColabWrap');
+  const colabVal = document.getElementById('dColab');
+  const c = p.colaboracion;
+  if (c && c.activa) {
+    const roles = Array.isArray(c.roles) ? c.roles : (c.rol ? [c.rol] : []);
+    if (roles.length > 0) {
+      colabVal.textContent = roles.join(' · ');
+      colabWrap.style.display = '';
+    } else {
+      colabWrap.style.display = 'none';
+    }
+  } else {
+    colabWrap.style.display = 'none';
+  }
   document.getElementById('dSidebarChars').textContent =
     p.nombre.replace(/[^A-Za-z]/g,'').toUpperCase().padEnd(14,'·').slice(0,14);
 
@@ -806,38 +1128,123 @@ function openDetail(slug) {
 
   if (imgs.length > 0) {
     document.getElementById('dContentStd').style.display = 'none';
-    document.getElementById('dImg3').parentElement.style.display = 'none';
+    document.getElementById('dImg2').src = ''; // limpiar src previo
+    document.getElementById('dImg3Wrap').style.display = 'none'; // BUG-4-1
     document.getElementById('dImg4Wrap').style.display = 'none';
     document.getElementById('dImg5Wrap').style.display = 'none';
     galleryEl.style.display = '';
-    buildGallery(galleryEl, imgs, p.descripcion_1, p.descripcion_2);
+    galleryEl.innerHTML = ''; // limpiar residuos previos
+    buildGallery(galleryEl, imgs, p.descripcion_1 || '', p.descripcion_2 || ''); // BUG-4-2
   } else {
     // Modo estándar (Corporativo Santander)
     const imagenes = p.imagenes || [];
     document.getElementById('dContentStd').style.display = '';
-    document.getElementById('dImg3').parentElement.style.display = '';
+    document.getElementById('dImg3Wrap').style.display = ''; // BUG-4-1
     galleryEl.style.display = 'none';
+    galleryEl.innerHTML = ''; // limpiar residuos previos
     document.getElementById('dImg2').src = imagenes[1] || '';
     document.getElementById('dImg3').src = imagenes[2] || '';
     document.getElementById('dImg4Wrap').style.display = imagenes[3] ? '' : 'none';
-    if (imagenes[3]) document.getElementById('dImg4').src = imagenes[3];
+    document.getElementById('dImg4').src = imagenes[3] || '';
     document.getElementById('dImg5Wrap').style.display = imagenes[4] ? '' : 'none';
-    if (imagenes[4]) document.getElementById('dImg5').src = imagenes[4];
-    document.getElementById('dP1').textContent = p.descripcion_1;
-    document.getElementById('dP2').textContent = p.descripcion_2;
+    document.getElementById('dImg5').src = imagenes[4] || '';
+    document.getElementById('dP1').textContent = p.descripcion_1 || '';
+    document.getElementById('dP2').textContent = p.descripcion_2 || '';
   }
 }
 
 function closeDetail() {
   const ov = document.getElementById('detailOverlay');
   ov.classList.remove('is-open');
-  setTimeout(() => { document.body.style.overflow = ''; }, 400);
+  // BUG-4-4: 450ms en lugar de 400 — buffer de 50ms para que el overflow
+  //          no se restaure antes de que termine la transición CSS de 0.4s
+  // BUG-4-5: guardar ID del timer para que openDetail() pueda cancelarlo
+  _closeTimer = setTimeout(() => {
+    document.body.style.overflow = '';
+    _closeTimer = null;
+  }, 450);
 }
 
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDetail(); });
 
+// ── Cargar datos de contacto (WhatsApp dinámico) ───────────────────
+async function loadContactoWA() {
+  try {
+    const res = await fetch('data/contacto.json');
+    if (!res.ok) throw new Error(`HTTP ${res.status}`); // BUG-2-1
+    const data = await res.json();
+    const waUrl = `https://wa.me/52${data.telefono}?text=Hola%2C%20me%20interesa%20conocer%20m%C3%A1s%20sobre%20sus%20servicios.`;
+    const btn = document.getElementById('waBtn');
+    if (btn) btn.href = waUrl;
+  } catch(e) {
+    console.error('No se pudo cargar contacto.json para WhatsApp', e);
+  }
+}
+
+// ── Event delegation para botones de vista y filtros ────────────────
+function initEventListeners() {
+  // Filter-bar (RED / LISTA y chips de tipo móvil)
+  const filterBar = document.querySelector('.filter-bar');
+  if (filterBar) {
+    filterBar.addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-view]');
+      if (btn) {
+        const view = btn.dataset.view;
+        if (view === 'grid' || view === 'list') setView(view, btn);
+        return;
+      }
+      // BUG-3-3: chips llaman filterType() para togglear correctamente
+      // y sincronizar sidebar, igual que los filtros del sidebar
+      const chip = e.target.closest('[data-mobile-type]');
+      if (chip) {
+        filterType(chip.dataset.mobileType);
+      }
+    });
+  }
+  // Panel derecho (Índice → Vista y Año — un solo listener)
+  const indexPanel = document.querySelector('.index-panel');
+  if (indexPanel) {
+    indexPanel.addEventListener('click', (e) => {
+      const viewBtn = e.target.closest('[data-view]');
+      if (viewBtn) {
+        const view = viewBtn.dataset.view;
+        if (view === 'grid' || view === 'list') setView(view, viewBtn);
+        return;
+      }
+      const yearBtn = e.target.closest('[data-filter-year]');
+      if (yearBtn) {
+        // BUG-3-1: pasar string directamente, sin Number()
+        filterYear(yearBtn.dataset.filterYear);
+      }
+    });
+  }
+  // Sidebar (Filtros Año y Tipo)
+  const sidebar = document.querySelector('.sidebar');
+  if (sidebar) {
+    sidebar.addEventListener('click', (e) => {
+      const yearBtn = e.target.closest('[data-filter-year]');
+      if (yearBtn) {
+        // BUG-3-1: pasar string directamente, sin Number()
+        filterYear(yearBtn.dataset.filterYear);
+        return;
+      }
+      const typeBtn = e.target.closest('[data-filter-type]');
+      if (typeBtn) { filterType(typeBtn.dataset.filterType); return; }
+      const clearBtn = e.target.closest('[data-filter-clear]');
+      if (clearBtn) { clearFilters(); return; }
+    });
+  }
+}
+
 // ── Inicializar ──────────────────────────────────────────────────────
-loadProyectos();
+document.addEventListener('DOMContentLoaded', () => {
+  document.documentElement.classList.remove('no-transition');
+  updateToggleLabel();
+  updateThemeAssets();
+  initEventListeners();
+  loadProyectos();    // BUG-2-2: dentro de DOMContentLoaded
+  loadContactoWA();   // BUG-2-2: dentro de DOMContentLoaded
+});
 </script>
 <script>
   // Netlify Identity — redirige al panel /admin tras el login
