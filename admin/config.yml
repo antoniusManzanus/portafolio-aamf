@@ -1,3 +1,23 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# AAMF Portfolio — Configuración de Decap CMS
+# ─────────────────────────────────────────────────────────────────────────────
+#
+# LOCAL (localhost):
+#   local_backend: true hace que el CMS escriba en los archivos locales
+#   en lugar de pushear a GitHub en cada Save. Requiere que `decap-server`
+#   esté corriendo (lo inicia iniciar.bat automáticamente).
+#   No se necesita autenticación.
+#
+# PRODUCCIÓN (Netlify):
+#   Fuera de localhost, local_backend es ignorado y el CMS usa git-gateway.
+#   Requisito: tener Netlify Identity activado en el proyecto de Netlify
+#   (Settings → Identity → Enable Identity) y Git Gateway habilitado
+#   (Settings → Identity → Services → Enable Git Gateway).
+#   Invitar usuarios en la sección Identity del dashboard de Netlify.
+# ─────────────────────────────────────────────────────────────────────────────
+
+local_backend: true
+
 backend:
   name: git-gateway
   branch: main
@@ -162,9 +182,18 @@ collections:
         widget: text
         hint: "Segundo párrafo descriptivo del proyecto"
 
+  # Corrección Punto 3 (ver correcciones.md): esta colección se oculta
+  # porque no tiene efecto real. server.js regenera data/proyectos/index.json
+  # automáticamente en cada "Publicar" (orden alfabético, a partir de los
+  # archivos que existen en la carpeta), así que cualquier orden que se
+  # definiera aquí a mano se pierde en el siguiente push. Además, el sitio
+  # público (index.html) no usa este orden para mostrar los proyectos: los
+  # ordena siempre por año. Se deja la definición por si en el futuro se
+  # quiere volver a exponer como referencia de solo lectura.
   - name: indice
     label: Índice de proyectos
-    description: "Lista de slugs de proyectos activos. Se actualiza al agregar o eliminar proyectos."
+    description: "Lista de slugs de proyectos activos (se genera automáticamente, de solo referencia)."
+    hide: true
     files:
       - name: slugs
         label: Slugs activos

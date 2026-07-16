@@ -5,9 +5,34 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex">
   <title>Panel AAMF</title>
-  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+
+  <!--
+    Netlify Identity Widget: solo se carga fuera de localhost.
+    En local, el CMS usa decap-server (local_backend: true) y no
+    necesita autenticación. Cargar el widget en local puede provocar
+    un popup de login innecesario. Esta etiqueta sí depende de internet,
+    pero solo se ejecuta en producción (Netlify), donde ya hay conexión.
+  -->
+  <script>
+    if (!['localhost', '127.0.0.1'].includes(window.location.hostname)) {
+      var s = document.createElement('script');
+      s.src = 'https://identity.netlify.com/v1/netlify-identity-widget.js';
+      document.head.appendChild(s);
+    }
+  </script>
 </head>
 <body>
-  <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+  <!--
+    Corrección Punto 1 (ver correcciones.md):
+    Antes: <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+    Ese script se descargaba de una CDN externa en cada carga del panel,
+    por lo que sin internet el CMS no abría, aunque decap-server y
+    server.js corrieran 100% en local.
+
+    Ahora: se sirve el mismo bundle desde un archivo local, copiado por
+    "npm run vendorizar-cms" (se ejecuta solo tras "npm install").
+    Esto también evita depender de unpkg.com en producción (Netlify).
+  -->
+  <script src="/admin/vendor/decap-cms/decap-cms.js"></script>
 </body>
 </html>

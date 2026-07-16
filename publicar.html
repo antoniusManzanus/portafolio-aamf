@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>Publicar — AAMF Portfolio</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0d1117;
+      --surface:   #161b22;
+      --border:    #30363d;
+      --text:      #c9d1d9;
+      --muted:     #8b949e;
+      --add-bg:    #0d2a1a;
+      --add-fg:    #3fb950;
+      --del-bg:    #2a0d0d;
+      --del-fg:    #f85149;
+      --hunk-fg:   #79c0ff;
+      --tag-new:   #1f4f28;
+      --tag-mod:   #1a3a5c;
+      --tag-del:   #4a1010;
+      --accent:    #238636;
+      --accent-hv: #2ea043;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      font-size: 14px;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* ── Layout ── */
+    header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: .75rem 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    header h1 { font-size: .9rem; font-weight: 600; color: var(--text); }
+    header nav { display: flex; gap: .75rem; margin-left: auto; }
+    header nav a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: .8rem;
+      padding: .25rem .6rem;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      transition: color .15s, border-color .15s;
+    }
+    header nav a:hover { color: var(--text); border-color: var(--muted); }
+
+    main {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 4rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    /* ── Secciones ── */
+    .section-title {
+      font-size: .75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--muted);
+      margin-bottom: .75rem;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    /* ── Lista de archivos ── */
+    #lista-archivos {
+      list-style: none;
+    }
+    #lista-archivos li {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      padding: .6rem 1rem;
+      border-bottom: 1px solid var(--border);
+      font-family: 'SFMono-Regular', Consolas, monospace;
+      font-size: .8rem;
+    }
+    #lista-archivos li:last-child { border-bottom: none; }
+
+    .tag {
+      font-size: .65rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      padding: .15rem .45rem;
+      border-radius: 4px;
+      min-width: 72px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+    .tag-nuevo      { background: var(--tag-new);  color: var(--add-fg); }
+    .tag-modificado { background: var(--tag-mod);  color: var(--hunk-fg); }
+    .tag-eliminado  { background: var(--tag-del);  color: var(--del-fg); }
+    .tag-otro       { background: #2a2a2a; color: var(--muted); }
+
+    .empty-state {
+      padding: 2rem;
+      text-align: center;
+      color: var(--muted);
+      font-size: .85rem;
+    }
+
+    /* ── Diff ── */
+    #diff-container {
+      font-family: 'SFMono-Regular', Consolas, monospace;
+      font-size: .78rem;
+      line-height: 1.55;
+      overflow-x: auto;
+      max-height: 420px;
+      overflow-y: auto;
+    }
+
+    .diff-line {
+      display: block;
+      padding: 0 1rem;
+      white-space: pre;
+    }
+    .diff-add     { background: var(--add-bg); color: var(--add-fg); }
+    .diff-del     { background: var(--del-bg); color: var(--del-fg); }
+    .diff-hunk    { color: var(--hunk-fg); background: transparent; }
+    .diff-meta    { color: var(--muted); background: transparent; }
+    .diff-context { color: var(--text); }
+    .diff-empty   { padding: 1rem; color: var(--muted); font-style: italic; font-family: inherit; }
+
+    /* ── Formulario de publicación ── */
+    .publish-form {
+      padding: 1.25rem 1.25rem 1rem;
+    }
+    .publish-form label {
+      display: block;
+      font-size: .75rem;
+      font-weight: 600;
+      color: var(--muted);
+      margin-bottom: .4rem;
+    }
+    .publish-form input[type="text"] {
+      width: 100%;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text);
+      padding: .5rem .75rem;
+      font-size: .85rem;
+      font-family: inherit;
+      outline: none;
+      transition: border-color .15s;
+    }
+    .publish-form input[type="text"]:focus {
+      border-color: #58a6ff;
+    }
+
+    .btn-row {
+      display: flex;
+      gap: .75rem;
+      margin-top: 1rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    button {
+      cursor: pointer;
+      border: none;
+      border-radius: 6px;
+      padding: .5rem 1.1rem;
+      font-size: .85rem;
+      font-family: inherit;
+      font-weight: 500;
+      transition: background .15s, opacity .15s;
+    }
+    button:disabled { opacity: .5; cursor: not-allowed; }
+
+    #btn-verificar {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
+    #btn-verificar:hover:not(:disabled) { background: var(--border); }
+
+    #btn-publicar {
+      background: var(--accent);
+      color: #fff;
+      min-width: 140px;
+    }
+    #btn-publicar:hover:not(:disabled) { background: var(--accent-hv); }
+
+    /* ── Estado / mensajes ── */
+    #estado {
+      font-size: .82rem;
+      padding: .4rem 0;
+    }
+    .estado-ok      { color: var(--add-fg); }
+    .estado-error   { color: var(--del-fg); }
+    .estado-info    { color: var(--muted); }
+    .estado-loading { color: var(--hunk-fg); }
+
+    /* ── Spinner ── */
+    .spinner {
+      display: inline-block;
+      width: 12px; height: 12px;
+      border: 2px solid var(--muted);
+      border-top-color: var(--hunk-fg);
+      border-radius: 50%;
+      animation: spin .6s linear infinite;
+      vertical-align: middle;
+      margin-right: .3rem;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>AAMF Portfolio — Panel de publicación</h1>
+  <nav>
+    <a href="/">← Preview</a>
+    <a href="/admin/">Panel CMS</a>
+  </nav>
+</header>
+
+<main>
+
+  <!-- ── Archivos con cambios ── -->
+  <section>
+    <p class="section-title">Archivos con cambios pendientes</p>
+    <div class="card">
+      <ul id="lista-archivos">
+        <li><span class="estado-info" style="padding:.6rem 1rem;display:block">
+          Haz clic en "Verificar cambios" para cargar el estado actual.
+        </span></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ── Diff ── -->
+  <section>
+    <p class="section-title">Diferencias respecto al último commit</p>
+    <div class="card">
+      <div id="diff-container">
+        <span class="diff-empty">El diff aparece aquí después de verificar.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Publicar ── -->
+  <section>
+    <p class="section-title">Publicar en GitHub → Netlify</p>
+    <div class="card publish-form">
+      <label for="msg-commit">Mensaje del commit</label>
+      <input type="text" id="msg-commit" value="Update: cambios del portfolio">
+      <div class="btn-row">
+        <button id="btn-verificar" onclick="verificar()">Verificar cambios</button>
+        <button id="btn-publicar"  onclick="publicar()" disabled>⬆ Publicar</button>
+        <span id="estado" class="estado-info"></span>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script>
+  // ── Estado de la app ──────────────────────────────────────────
+  let hayCambios = false;
+
+  // ── Helpers ──────────────────────────────────────────────────
+  function setEstado(msg, tipo = 'info') {
+    const el = document.getElementById('estado');
+    el.className = 'estado-' + tipo;
+    el.innerHTML = msg;
+  }
+
+  function renderLista(archivos) {
+    const ul = document.getElementById('lista-archivos');
+    if (!archivos.length) {
+      ul.innerHTML = '<li><span class="empty-state">✓ Sin cambios pendientes.</span></li>';
+      return;
+    }
+    ul.innerHTML = archivos.map(f => {
+      const tipo  = f.tipo || 'otro';
+      const clase = { nuevo: 'tag-nuevo', modificado: 'tag-modificado',
+                      eliminado: 'tag-eliminado' }[tipo] || 'tag-otro';
+      return `<li>
+        <span class="tag ${clase}">${tipo}</span>
+        <span>${f.path}</span>
+      </li>`;
+    }).join('');
+  }
+
+  function renderDiff(diff) {
+    const container = document.getElementById('diff-container');
+    if (!diff) {
+      container.innerHTML = '<span class="diff-empty">Sin diferencias en archivos rastreados.</span>';
+      return;
+    }
+    const lineas = diff.split('\n').map(line => {
+      let cls = 'diff-context';
+      if (line.startsWith('+') && !line.startsWith('+++')) cls = 'diff-add';
+      else if (line.startsWith('-') && !line.startsWith('---')) cls = 'diff-del';
+      else if (line.startsWith('@@'))          cls = 'diff-hunk';
+      else if (line.startsWith('diff') ||
+               line.startsWith('index') ||
+               line.startsWith('---') ||
+               line.startsWith('+++'))          cls = 'diff-meta';
+      // Escapar HTML
+      const safe = line.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+      return `<span class="diff-line ${cls}">${safe}</span>`;
+    });
+    container.innerHTML = lineas.join('');
+  }
+
+  // ── Verificar ─────────────────────────────────────────────────
+  async function verificar() {
+    const btnV = document.getElementById('btn-verificar');
+    const btnP = document.getElementById('btn-publicar');
+    btnV.disabled = true;
+    btnP.disabled = true;
+    setEstado('<span class="spinner"></span>Verificando...', 'loading');
+
+    try {
+      const r = await fetch('/api/status').then(r => r.json());
+      if (!r.ok) throw new Error(r.error);
+
+      hayCambios = r.hayCambios;
+      renderLista(r.archivos);
+      renderDiff(r.diff);
+
+      if (hayCambios) {
+        setEstado(`${r.archivos.length} archivo(s) con cambios. Revisa el diff y pulsa Publicar.`, 'info');
+        btnP.disabled = false;
+      } else {
+        setEstado('Sin cambios pendientes. Edita algo en el CMS antes de publicar.', 'info');
+      }
+    } catch (e) {
+      setEstado('Error al verificar: ' + e.message, 'error');
+    } finally {
+      btnV.disabled = false;
+    }
+  }
+
+  // ── Publicar ─────────────────────────────────────────────────
+  async function publicar() {
+    if (!hayCambios) return;
+
+    const mensaje = document.getElementById('msg-commit').value.trim()
+                    || 'Update: cambios del portfolio';
+    const btnP = document.getElementById('btn-publicar');
+    const btnV = document.getElementById('btn-verificar');
+
+    btnP.disabled = true;
+    btnV.disabled = true;
+    setEstado('<span class="spinner"></span>Publicando en GitHub...', 'loading');
+
+    try {
+      const r = await fetch('/api/push', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({ mensaje })
+      }).then(r => r.json());
+
+      if (!r.ok) throw new Error(r.error);
+
+      hayCambios = false;
+      setEstado('✅ Publicado correctamente. Netlify está desplegando los cambios.', 'ok');
+      renderLista([]);
+      renderDiff('');
+    } catch (e) {
+      setEstado('❌ Error al publicar: ' + e.message, 'error');
+      btnP.disabled = false;
+    } finally {
+      btnV.disabled = false;
+    }
+  }
+
+  // ── Verificar al cargar automáticamente ──────────────────────
+  window.addEventListener('DOMContentLoaded', verificar);
+</script>
+
+</body>
+</html>
