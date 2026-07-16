@@ -71,7 +71,8 @@ if !ERRORLEVEL! NEQ 0 (
 :: -- 4. Iniciar decap-server (proxy local para el CMS) --
 echo.
 echo [4/5] Iniciando decap-server (puerto 8081, solo local)...
-start "Decap Server" cmd /k "cd /d "%~dp0" && set BIND_HOST=127.0.0.1 && npx decap-server"
+set "BIND_HOST=127.0.0.1"
+start "Decap Server" cmd /k "npx decap-server"
 
 :: Esperar a que decap-server levante antes de abrir el navegador
 timeout /t 3 /nobreak >nul

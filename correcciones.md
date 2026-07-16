@@ -17,6 +17,7 @@ un entorno real (repositorio Git, `npm install`, `decap-server` y
 | 4 | `git push` falla con un error críptico si no hay identidad de Git configurada | Media — bloquea la publicación | ✅ Corregido |
 | 5 | `decap-server` y `server.js` quedan expuestos a toda la red local | Media — riesgo de seguridad | ✅ Corregido |
 | 6 | Ruido "`\ No newline at end of file`" en cada diff | Baja — cosmético | ✅ Corregido |
+| 7 | `BIND_HOST` con espacio al final rompe `decap-server` | Alta — bloquea el uso local del CMS | ✅ Corregido |
 
 ---
 
@@ -345,6 +346,14 @@ que se pretende ("herramienta para uso personal, en la propia máquina").
   navegador, no del servidor):
   <https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/CORS>
 
+> **Nota posterior — ver Punto 7:** La implementación mostrada arriba para
+> `iniciar.bat` tenía un bug. La línea
+> `set BIND_HOST=127.0.0.1 && npx decap-server` (con espacio antes de `&&`)
+> asigna `127.0.0.1 ` (con espacio final) a `BIND_HOST` debido a cómo `cmd`
+> procesa los espacios en el comando `set`. Esto provocaba que
+> `decap-server` crasheara con `ENOTFOUND 127.0.0.1 ` al no poder resolver
+> el hostname. El Punto 7 documenta la corrección definitiva.
+
 ---
 
 ## Punto 6 — Ruido "`\ No newline at end of file`" en cada diff
@@ -390,6 +399,126 @@ de esta corrección.
 
 ---
 
+## Punto 7 — `BIND_HOST` con espacio al final rompe `decap-server`
+
+### Problema
+
+La corrección del Punto 5 agregó `set BIND_HOST=127.0.0.1 && npx decap-server`
+dentro del comando `start "Decap Server" cmd /k "..."` en `iniciar.bat` para
+restringir `decap-server` a la interfaz de loopback. Sin embargo, la línea
+contenía un espacio entre `127.0.0.1` y `&&`:
+
+```bat
+start "Decap Server" cmd /k "cd /d "%~dp0" && set BIND_HOST=127.0.0.1 && npx decap-server"
+```
+
+En `cmd`, el comando `set VAR=valor` captura **todo** lo que sigue al primer
+signo `=` como parte del valor, incluyendo espacios. Por lo tanto,
+`set BIND_HOST=127.0.0.1 &&` asigna `127.0.0.1 ` (con espacio final) a la
+variable. Cuando `decap-server` pasa `process.env.BIND_HOST` a
+`app.listen(port, host)`, Node.js intenta resolver `"127.0.0.1 "` como un
+hostname mediante DNS, lo cual falla porque los espacios no son válidos en
+nombres de host.
+
+### Evidencia
+
+El error exacto reportado por el usuario al ejecutar `iniciar.bat`:
+
+```
+info: Decap CMS File System Proxy Server configured with ...
+node:events:497
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: getaddrinfo ENOTFOUND 127.0.0.1
+    ...
+    hostname: '127.0.0.1 '
+```
+
+(Obsérvese el espacio al final en `hostname: '127.0.0.1 '`).
+
+Se confirmó la causa reproduciendo el error: el comando
+`set BIND_HOST=127.0.0.1 &&` en cmd (con espacio antes de `&&`) produce
+`BIND_HOST=127.0.0.1 ` (espacio incluido). Usando la sintaxis correcta
+`set "BIND_HOST=127.0.0.1"` se elimina el espacio sobrante y
+`decap-server` arranca sin errores (confirmado con prueba directa del
+servidor).
+
+Adicionalmente, se detectó que el `cd /d "%~dp0"` dentro del `cmd /k` era
+redundante: la línea 3 de `iniciar.bat` ya ejecuta
+`cd /d "%~dp0"` al inicio del script, y el proceso hijo lanzado con `start`
+hereda el directorio de trabajo del padre. Su presencia provocaba además
+problemas de *parsing* de comillas debido a que `%~dp0` termina con `\`,
+que escapa la comilla de cierre.
+
+### Corrección
+
+Se modificó `iniciar.bat` para:
+
+1. Establecer `BIND_HOST` en el proceso padre (antes del `start`) usando la
+   sintaxis `set "BIND_HOST=127.0.0.1"`, que garantiza que no haya espacios
+   sobrantes en el valor.
+2. Simplificar el comando `start` eliminando `cd /d "%~dp0" &&`
+   (redundante, línea 3 ya lo hace) y el `set BIND_HOST=... &&`
+   (ahora se hereda del padre vía el bloque de entorno del proceso).
+
+```bat
+:: Antes (Punto 5 — con bug):
+start "Decap Server" cmd /k "cd /d "%~dp0" && set BIND_HOST=127.0.0.1 && npx decap-server"
+
+:: Después (Punto 7 — corregido):
+set "BIND_HOST=127.0.0.1"
+start "Decap Server" cmd /k "npx decap-server"
+```
+
+El proceso hijo lanzado por `start` hereda tanto el directorio de trabajo
+(ya fijado por `cd /d "%~dp0"` en línea 3) como la variable de entorno
+`BIND_HOST` del padre, que a su vez fue establecida sin espacios gracias a
+la sintaxis `set "VAR=valor"`.
+
+### Justificación
+
+- `set "BIND_HOST=127.0.0.1"` es la forma canónica y recomendada por la
+  documentación de `cmd` para asignar valores a variables de entorno sin
+  espacios sobrantes. La documentación oficial de Microsoft y múltiples
+  referencias (SS64, Stack Overflow) la indican como la mejor práctica.
+- `start` sin el modificador `/i` hereda el bloque de entorno completo del
+  proceso padre, según la documentación de Microsoft sobre procesos y
+  herencia de entorno en Windows. Por lo tanto, la variable `BIND_HOST`
+  está disponible para el proceso `npx decap-server` sin necesidad de
+  establecerla dentro del argumento de `cmd /k`.
+- Al eliminar el `cd /d "%~dp0"` redundante se evita, de paso, el sutil
+  problema de *parsing* de comillas cuando `%~dp0` contiene espacios (su
+  `\` final escapa la comilla de cierre en la sintaxis de `cmd`).
+
+### Archivos modificados
+
+- `iniciar.bat` (corrección adicional sobre el cambio del Punto 5)
+
+### Fuentes
+
+- Documentación de Microsoft — *Inheritance (Processes and Threads)*:
+  <https://learn.microsoft.com/en-us/windows/win32/procthread/inheritance>
+  ("A child process inherits the environment variables of its parent
+  process by default").
+- Documentación de Microsoft — `start` command:
+  <https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/start>
+- SS64 — `set` command (trailing spaces en asignaciones):
+  <https://ss64.com/nt/set.html>
+- Stack Overflow — *Why is no string output with 'echo %var%' after using
+  'set var = text' command in cmd?* (trailing space en `set`):
+  <https://stackoverflow.com/questions/26386697>
+- Stack Overflow — *Batch File and Quoting Variables* (sintaxis
+  `set "VAR=valor"`):
+  <https://stackoverflow.com/questions/35780460>
+- Stack Overflow — *Start new cmd.exe and NOT inherit environment?*
+  (confirmación de herencia por defecto con `start`):
+  <https://stackoverflow.com/questions/8261156>
+- Decap CMS — *Proxy Server* (documentación oficial de `BIND_HOST`):
+  <https://github.com/decaporg/decap-cms/blob/main/packages/decap-server/README.md>
+
+---
+
 ## Archivos entregados con las correcciones
 
 ```
@@ -400,7 +529,7 @@ admin/
 scripts/
   vendorizar-cms.js    ← nuevo (Punto 1)
 server.js               ← modificado (Puntos 5 y 6)
-iniciar.bat             ← modificado (Puntos 4 y 5)
+iniciar.bat             ← modificado (Puntos 4, 5 y 7)
 package.json            ← modificado (Punto 1)
 ```
 
