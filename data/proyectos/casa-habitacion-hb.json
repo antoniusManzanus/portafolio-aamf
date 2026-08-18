@@ -1,0 +1,33 @@
+{
+  "descripcion_2": "La planta alta reúne tres recámaras adicionales, cada una con su propio baño y vestidor, distribuidas alrededor de un pasillo central que conecta con una terraza en el segundo nivel. Uno de los espacios integra además un pequeño estudio o rincón de trabajo, pensado para quienes necesitan un lugar propio dentro del hogar.\n\nLos acabados en madera y piedra se repiten en ambos niveles, dando continuidad visual y calidez a toda la casa. El resultado es una vivienda de cuatro recámaras que se adapta a distintos ritmos de vida: espacios abiertos para compartir, y rincones privados para descansar.",
+  "colaboracion": {
+    "activa": false,
+    "roles": [
+      "Diseño"
+    ]
+  },
+  "estado": "En construcción",
+  "nombre": "CASA HABITACION HB",
+  "area": "240 M2",
+  "tipo": "residencial",
+  "galeria": [
+    " https://i.ibb.co/9Hw5hzZW/EXT-01.png",
+    "https://i.ibb.co/4gCmjvtL/EXT-02.png",
+    "https://i.ibb.co/Ps7zV6Yh/EXT-03.png",
+    "https://i.ibb.co/0jyyyc0P/1-PB-01.jpg",
+    "https://i.ibb.co/hFcGYhbP/2-PA-01.jpg",
+    "https://i.ibb.co/zTgVmMJg/3-PA-02.jpg",
+    "https://i.ibb.co/spf3hW6x/4-PB-02.jpg",
+    "https://i.ibb.co/4nRwyNtY/INT-01.png",
+    "https://i.ibb.co/Cp7XgQCf/INT-02.png",
+    "https://i.ibb.co/XZN4NZHw/INT-03.png",
+    "https://i.ibb.co/hFNPD9vK/INT-04.png",
+    "https://i.ibb.co/b5HXKpch/INT-05.png",
+    "https://i.ibb.co/NnpWLLGq/INT-06.png"
+  ],
+  "year": 2025,
+  "portada": "https://i.ibb.co/9Hw5hzZW/EXT-01.png",
+  "programa": "VIVIENDA UNIFAMILIAR",
+  "ubicacion": "VERACRUZ, VER",
+  "descripcion_1": "Una casa que respira contigo\n\nEn planta baja, la vida social se despliega sin barreras: cocina con isla de mármol negro, comedor y sala integrados en un solo espacio bañado de luz natural, con acceso directo a terraza y jardín. Una recámara en este nivel —con baño y closet propios— ofrece la flexibilidad de recibir visitas o descansar sin subir escaleras. Dos cajones de estacionamiento y un jardín delantero con palmeras completan el acceso a la vivienda."
+}
